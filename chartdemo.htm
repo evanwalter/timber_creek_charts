@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Untitled Page</title>
+    
+    <script type="text/javascript" src="timbercreekcharts.js"></script>
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+    </style>
+    
+</head>
+<body>
+
+<div>
+        <div id="divtest" style="float:left;">
+        </div>
+        <div id="divtest1_5" style="float:left;">
+        </div>
+</div>
+<div>
+        <div id="divtest3" style="float:left;">
+        </div>
+        <div id="divtest3_1" style="float:left;">
+        </div>
+</div>
+<div style="float:none; clear:both">
+        <div id="divtest2" style="float:left;">
+        </div>
+        <div id="divtest4" style="float:left;">
+        </div>
+</div>
+<div style="float:none; clear:both">
+        <div id="divtest5" style="float:left;">
+        </div>
+
+        <div id="divtest6" style="float:left;">
+        </div>
+</div>
+
+<div style="float:none; clear:both">
+        <div id="divtest7" style="float:left;">
+        </div>
+
+        <div id="divtest8" style="float:left;">
+        </div>
+        
+         <div id="divtest9" style="float:left;">
+        </div>
+</div>
+
+
+  <script type="text/javascript">
+
+      var my_new_chart = {
+          "div_id": "divtest",
+          "dimensions": { "height": 400, "width": 550 },
+          "charttype": "line",
+          "items": [{ "name": "Males", "color": "red", "format": "bar" }, { "name": "Females", "color": "blue" }],  // REQUIRED
+          "itempoints": ["North", "South", "East", "West"],   
+          "data": [[41, 25, 55, 75], [75, 85, 64, 77]],  
+          "ispercentage": true,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,          
+          "additionalsettings": { "showbackground" : true }
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
+          "div_id": "divtest1_5",
+          "dimensions": { "height": 400, "width":550 },
+          "charttype": "bar", 
+          "items": [{ "name": "Males", "color": "#8675ef", "format": "bar" }, { "name": "Females", "color": "#1020fe" , "format": "bar" }],  // REQUIRED
+          "itempoints": ["North", "South", "East", "West"],  
+          "data": [[41, 25, 55, 75], [75, 85, 64, 77]], 
+          "ispercentage": true,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,
+          "additionalsettings": { "barmargin": "8","showscales" : false , "showlegend" : true}
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
+          "div_id": "divtest3",
+          "dimensions": { "height": 400, "width": 500 },
+          "charttype": "column", 
+          "items": [{ "name": "Males", "color": "#FF2413", "format": "bar" }], 
+          "itempoints": ["North", "South", "East", "West"],  
+          "data": [[41, 25, 55, 75]], 
+          "ispercentage": true,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,
+          "additionalsettings": { "barmargin": "14","showscales" : false }
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);
+      var my_new_chart = {
+          "div_id": "divtest3_1",
+          "dimensions": { "height": 300, "width": 500 },
+          "charttype": "bar", 
+          "items": [{ "name": "Males", "color": "#4242ff", "format": "bar" }],  
+          "itempoints": ["North", "South", "East", "West"],  
+          "data": [41, 25, 55, 75], 
+          "ispercentage": true,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,
+          "additionalsettings": {  "showlegend" : false}
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);
+      
+      
+      
+       var my_new_chart = {
+          "div_id": "divtest2",
+          "dimensions": { "height": 400, "width":1000 },
+          "charttype": "column", 
+          "items": [{ "name": "group 1", "color": "#8675ef", "format": "bar" }, { "name": "group 2 ", "color": "#6364fe" , "format": "bar" }, { "name": "group 3 ", "color": "#4264fe" , "format": "bar" }, { "name": "group 4 ", "color": "#9764f6" , "format": "bar" }, { "name": "group 5 ", "color": "#5397fe" , "format": "bar" }],  // REQUIRED
+          "itempoints": ["Q4,2011", "Q1,2012", "Q2,2012", "Q3,2012", "Q4,2012", "Q1,2013"],  
+          "data": [[204,191, 225.54, 211, 225,264], [76.575, 85, 89.5, 97,90,88], [144,185, 176, 155.6, 175,186.7], [163,155, 178.5, 184, 174,145], [103,126, 131, 104, 119.5,108]], 
+          "ispercentage": false,
+          "lineitems": [{ "name": "2011 Average", "color": "red" }, { "name": "2010 Average", "color": "yellow" }],
+          "linedata" : [[153,147,165,155,109,160],[184,160,153,141,185,153]],
+          "chart_label": "What is the average monthly amount spent on widget maintenance in dollars?",
+          "chart_label_position": "bottom",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,
+          "additionalsettings": { "barmargin": "8","showscales" : true }
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);     
+      my_new_chart.charttype = "bar";
+      my_new_chart.div_id = "divtest5";
+      my_new_chart.dimensions.height = 800;
+      my_new_chart.dimensions.width = 600;
+      my_new_chart.chart_label_position = "top";
+      build_a_timber_creek_chart(my_new_chart);
+
+
+      var my_new_chart = {
+          "div_id": "divtest7",
+          "dimensions": { "height": 400, "width": 400 },
+          "charttype": "pie",
+          "items": [{ "name": "Set 1", "color": "#8675ef" }, { "name": "Set 2", "color": "#6397fe" }, { "name": "Set 3", "color": "#4264fe" }, { "name": "Set 4", "color": "#B964f6" }],  // REQUIRED
+          "data": [55,45,93,234],
+          "ispercentage": false,
+          "chart_label": "In which set do you belong?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+
+
+      var my_new_chart = {
+          "div_id": "divtest8",
+          "dimensions": { "height": 400, "width": 400 },
+          "charttype": "pie",
+          "items": [{ "name": "Set 1", "color": "#5100ef" }, { "name": "Set 2", "color": "#6397fe" }, { "name": "Set 3", "color": "#4264fe" }, { "name": "Set 4", "color": "#B964f6" }],  // REQUIRED
+          "data": [64,10,16,10],
+          "ispercentage": true,
+          "chart_label": "In which set do you belong?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+
+     var my_new_chart = {
+          "div_id": "divtest9",
+          "dimensions": { "height": 400, "width": 400 },
+          "charttype": "pie",
+          "items": [{ "name": "Set 1", "color": "#5100ef" }, { "name": "Set 2", "color": "#6397fe" }, { "name": "Set 3", "color": "#3e97fe" }, { "name": "Set 4", "color": "#B964f6" }, { "name": "Set 5", "color": "#0786f6" }],  // REQUIRED
+          "data": [50,10,16,10,14],
+          "ispercentage": true,
+          "chart_label": "In which set do you belong?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+  </script>
+
+</body>
+</html>
