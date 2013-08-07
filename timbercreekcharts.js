@@ -23,11 +23,13 @@ var svgheight=my_new_chart.dimensions.height;
 var chart_type=my_new_chart.charttype;
 
 var myitems=new Array(my_new_chart.items.length);
+var myitemcolors = new Array(my_new_chart.items.length);
+
 for (x=0; x < my_new_chart.items.length;x++)
 {
 	if(my_new_chart.items[x].name != null) {  myitems[x]=my_new_chart.items[x].name; }
 }
-var myitemcolors = new Array(my_new_chart.items.length);
+
 for (x=0; x < my_new_chart.items.length;x++)
 {
 	if(my_new_chart.items[x].color != null) {  myitemcolors[x]=my_new_chart.items[x].color; }else {myitemcolors[x]="blue"; }
@@ -420,7 +422,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                             lr1a.setAttribute("stroke-width", ".5");
                             svg.appendChild(lr1a);      
                }
-               
+
             var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
             t1.setAttribute("x", margin_left + (mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)) + 5);
                 t1.setAttribute("y", 50+(barheight*nextpos)+15);
@@ -546,7 +548,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
 
 //----------------------------------------- BUILD A COLUMN CHART -----------------------------------------------------//
-function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumnBorders)
+function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders)
 {
 
     var NS="http://www.w3.org/2000/svg";     
@@ -674,7 +676,7 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                             lr1a.setAttribute("stroke", "#000000"); 
                             lr1a.setAttribute("stroke-width", ".5");
                             svg.appendChild(lr1a);      
-                    }   
+                    }                                  
 
                     var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
                         t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/3));
