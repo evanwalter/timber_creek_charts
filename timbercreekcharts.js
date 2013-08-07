@@ -84,12 +84,17 @@ var bShowLegend=true;
 var bShowScales=true;
 var bShowBackground=false;
 var valueformat="%d";
+var bBar_Borders=true;
+var bColumn_Borders=true;
 
 if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.barmargin != null) { barmargin = my_new_chart.additionalsettings.barmargin; }
     if (my_new_chart.additionalsettings.showlegend != null) { bShowLegend = my_new_chart.additionalsettings.showlegend; }
     if (my_new_chart.additionalsettings.showscales != null) { bShowScales = my_new_chart.additionalsettings.showscales; }
     if (my_new_chart.additionalsettings.showbackground != null) { bShowBackground = my_new_chart.additionalsettings.showbackground; }
+    if (my_new_chart.additionalsettings.columnborders != null) { bColumn_Borders = my_new_chart.additionalsettings.columnborders;  bBar_Borders = my_new_chart.additionalsettings.columnborders;}
+    if (my_new_chart.additionalsettings.barborders != null) { bColumn_Borders = my_new_chart.additionalsettings.barborders;  bBar_Borders = my_new_chart.additionalsettings.barborders;}
+    
     if (my_new_chart.additionalsettings.valueformat != null) 
 	{ valueformat= my_new_chart.additionalsettings.valueformat; }
 	else {   if (bIsPercent == true) { valueformat="%d%"; }
@@ -104,10 +109,10 @@ if (chart_type.toLowerCase()=="line")
     }
 if (chart_type.toLowerCase()=="bar")
     {
-    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat)
+    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders)
     }
 if (chart_type.toLowerCase() == "column") {
-    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat)
+    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders)
 }
 
 if (chart_type.toLowerCase() == "pie") {
@@ -290,7 +295,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
 
 //----------------------------------------- BUILD A BAR CHART -----------------------------------------------------//
-function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat)
+function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders)
 {
     var NS="http://www.w3.org/2000/svg";     
     var svg=document.createElementNS(NS,"svg");
@@ -388,6 +393,34 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                 r1.setAttribute("fill", colorset[y]);
                 svg.appendChild(r1);     
 
+            if (bBarBorders == true)
+            {
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale));
+                            lr1.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale));
+                            lr1.setAttribute("y1", 50+(barheight*nextpos));
+                            lr1.setAttribute("y2", 50+(barheight*nextpos)+barheight-barmargin);
+                            lr1.setAttribute("stroke", "#000000");
+                            lr1.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1);      
+                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1a.setAttribute("x1", margin_left);
+                            lr1a.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale));
+                            lr1a.setAttribute("y1", 50+(barheight*nextpos));
+                            lr1a.setAttribute("y2", 50+(barheight*nextpos));
+                            lr1a.setAttribute("stroke", "#000000");
+                            lr1a.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1a);      
+                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1a.setAttribute("x1", margin_left);
+                            lr1a.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale));
+                            lr1a.setAttribute("y1", 50+(barheight*nextpos+barheight-barmargin));
+                            lr1a.setAttribute("y2", 50+(barheight*nextpos+barheight-barmargin));
+                            lr1a.setAttribute("stroke", "#000000"); 
+                            lr1a.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1a);      
+               }
+               
             var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
             t1.setAttribute("x", margin_left + (mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)) + 5);
                 t1.setAttribute("y", 50+(barheight*nextpos)+15);
@@ -513,7 +546,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
 
 //----------------------------------------- BUILD A COLUMN CHART -----------------------------------------------------//
-function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat)
+function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumnBorders)
 {
 
     var NS="http://www.w3.org/2000/svg";     
@@ -612,6 +645,36 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                         r1.setAttribute("height", mydata[y][x]*heightmultiplier*(100/max_value_on_scale));
                         r1.setAttribute("fill", colorset[y]);
                         svg.appendChild(r1);     
+                    
+                    
+                    if (bColumn_Borders==true)
+                    {
+                        //   BORDERS AROUND THE COLUMNS
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", 50+(barwidth*nextpos));
+                            lr1.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin);
+                            lr1.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                            lr1.setAttribute("y2", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                            lr1.setAttribute("stroke", "#000000");
+                            lr1.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1);      
+                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1a.setAttribute("x1", 50+(barwidth*nextpos));
+                            lr1a.setAttribute("x2", 50+(barwidth*nextpos));
+                            lr1a.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                            lr1a.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1a.setAttribute("stroke", "#000000");
+                            lr1a.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1a);      
+                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1a.setAttribute("x1", 50+(barwidth*nextpos)+barwidth-barmargin);
+                            lr1a.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin);
+                            lr1a.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                            lr1a.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1a.setAttribute("stroke", "#000000"); 
+                            lr1a.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1a);      
+                    }   
 
                     var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
                         t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/3));
