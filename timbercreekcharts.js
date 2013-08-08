@@ -1087,3 +1087,45 @@ function calculate_mylinedata(max_value_on_scale,mylinedata)
 }
 
 
+function shade(ncolor,dir)
+{
+    if (dir=="d")
+    {
+	    while  (ncolor.contains("1")){ncolor=ncolor.replace("1","0");}
+	    while  (ncolor.contains("2")){ncolor=ncolor.replace("2","1");}
+	    while  (ncolor.contains("3")){ncolor=ncolor.replace("3","2");}
+	    while  (ncolor.contains("4")){ncolor=ncolor.replace("4","3");}
+	    while  (ncolor.contains("5")){ncolor=ncolor.replace("5","4");}
+	    while  (ncolor.contains("6")){ncolor=ncolor.replace("6","5");}
+	    while  (ncolor.contains("7")){ncolor=ncolor.replace("7","6");}
+	    while  (ncolor.contains("8")){ncolor=ncolor.replace("8","7");}
+	    while  (ncolor.contains("9")){ncolor=ncolor.replace("9","8");}
+	    while  (ncolor.contains("a")){ncolor=ncolor.replace("a","9");}
+	    while  (ncolor.contains("b")){ncolor=ncolor.replace("b","a");}
+	    while  (ncolor.contains("c")){ncolor=ncolor.replace("c","b");}
+	    while  (ncolor.contains("d")){ncolor=ncolor.replace("d","c");}
+	    while  (ncolor.contains("e")){ncolor=ncolor.replace("e","d");}
+	    while  (ncolor.contains("f")){ncolor=ncolor.replace("f","e");}
+    }
+    else
+    {
+
+	    while  (ncolor.contains("e")){ncolor=ncolor.replace("e","f");}
+	    while  (ncolor.contains("d")){ncolor=ncolor.replace("d","e");}
+	    while  (ncolor.contains("c")){ncolor=ncolor.replace("c","d");}
+	    while  (ncolor.contains("b")){ncolor=ncolor.replace("b","c");}
+	    while  (ncolor.contains("a")){ncolor=ncolor.replace("a","b");}
+	    while  (ncolor.contains("9")){ncolor=ncolor.replace("9","a");}
+	    while  (ncolor.contains("8")){ncolor=ncolor.replace("8","9");}
+	    while  (ncolor.contains("7")){ncolor=ncolor.replace("7","8");}
+	    while  (ncolor.contains("6")){ncolor=ncolor.replace("6","7");}
+	    while  (ncolor.contains("5")){ncolor=ncolor.replace("5","6");}
+	    while  (ncolor.contains("4")){ncolor=ncolor.replace("4","5");}
+	    while  (ncolor.contains("3")){ncolor=ncolor.replace("3","4");}
+	    while  (ncolor.contains("2")){ncolor=ncolor.replace("2","3");}
+	    while  (ncolor.contains("1")){ncolor=ncolor.replace("1","2");}
+
+    }
+    return ncolor;
+}	
+
