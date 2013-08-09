@@ -88,6 +88,7 @@ var bShowBackground=false;
 var valueformat="%d";
 var bBar_Borders=true;
 var bColumn_Borders=true;
+var bShade_Borders=false;
 
 if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.barmargin != null) { barmargin = my_new_chart.additionalsettings.barmargin; }
@@ -96,6 +97,7 @@ if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.showbackground != null) { bShowBackground = my_new_chart.additionalsettings.showbackground; }
     if (my_new_chart.additionalsettings.columnborders != null) { bColumn_Borders = my_new_chart.additionalsettings.columnborders;  bBar_Borders = my_new_chart.additionalsettings.columnborders;}
     if (my_new_chart.additionalsettings.barborders != null) { bColumn_Borders = my_new_chart.additionalsettings.barborders;  bBar_Borders = my_new_chart.additionalsettings.barborders;}
+    if (my_new_chart.additionalsettings.shadeborders != null) { bShade_Borders = my_new_chart.additionalsettings.shadeborders; }
     
     if (my_new_chart.additionalsettings.valueformat != null) 
 	{ valueformat= my_new_chart.additionalsettings.valueformat; }
@@ -111,10 +113,10 @@ if (chart_type.toLowerCase()=="line")
     }
 if (chart_type.toLowerCase()=="bar")
     {
-    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders)
+    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders, bShade_Borders)
     }
 if (chart_type.toLowerCase() == "column") {
-    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders)
+    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders)
 }
 
 if (chart_type.toLowerCase() == "pie") {
@@ -297,7 +299,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
 
 //----------------------------------------- BUILD A BAR CHART -----------------------------------------------------//
-function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders)
+function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders, bShadeBorders)
 {
     var NS="http://www.w3.org/2000/svg";     
     var svg=document.createElementNS(NS,"svg");
@@ -404,7 +406,8 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                             lr1.setAttribute("y2", 50+(barheight*nextpos)+barheight-barmargin);
                             lr1.setAttribute("stroke", "#000000");
                             lr1.setAttribute("stroke-width", ".5");
-                            svg.appendChild(lr1);      
+                            svg.appendChild(lr1);    
+
                         var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
                             lr1a.setAttribute("x1", margin_left);
                             lr1a.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale));
@@ -422,6 +425,75 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                             lr1a.setAttribute("stroke-width", ".5");
                             svg.appendChild(lr1a);      
                }
+
+            //SHADING THE BORDERS
+            if (bShadeBorders == true)
+            {
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barheight > 25) { shadectr=3; }
+                 if (barheight > 35) { shadectr=4; }
+                 if (barheight > 45) { shadectr=5; }
+
+                 while (shadectr >=0)
+                 {                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", margin_left);
+                            lr1.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)-shadectr);
+                            lr1.setAttribute("y1", 50+(barheight*nextpos)+shadectr);
+                            lr1.setAttribute("y2", 50+(barheight*nextpos)+shadectr);
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", "1");
+                            svg.appendChild(lr1);   
+                        shadecolor=shade(shadecolor,"l");
+                        shadecolor=shade(shadecolor,"l");
+                        shadectr=shadectr-1;
+                 }   
+
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barheight > 25) { shadectr=3; }
+                 if (barheight > 35) { shadectr=4; }
+                 if (barheight > 45) { shadectr=5; }
+
+                 while (shadectr >=0)
+                 {
+                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", margin_left);
+                            lr1.setAttribute("x2", margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)-shadectr);
+                            lr1.setAttribute("y1", 50+(barheight*nextpos+barheight-barmargin)-shadectr);
+                            lr1.setAttribute("y2", 50+(barheight*nextpos+barheight-barmargin)-shadectr);
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", "1");
+                            svg.appendChild(lr1);   
+                        shadecolor=shade(shadecolor,"d");
+                        shadectr=shadectr-1;
+                 }               
+            
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barheight > 25) { shadectr=3; }
+                 if (barheight > 35) { shadectr=4; }
+                 if (barheight > 45) { shadectr=5; }
+
+                 while (shadectr >=0)
+                 {
+                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", (margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale))-shadectr);
+                            lr1.setAttribute("x2", (margin_left+mydata[y][x] * widthmultiplier * (100 / max_value_on_scale))-shadectr);
+                            lr1.setAttribute("y1", 50+(barheight*nextpos)+(shadectr));
+                            lr1.setAttribute("y2", 50+(barheight*nextpos)+barheight-barmargin-(shadectr));
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", "1");
+                            svg.appendChild(lr1);   
+                        shadecolor=shade(shadecolor,"l");
+                        shadecolor=shade(shadecolor,"l");
+                        shadectr=shadectr-1;
+                 }                          
+            }
+
 
             var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
             t1.setAttribute("x", margin_left + (mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)) + 5);
@@ -548,7 +620,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
 
 //----------------------------------------- BUILD A COLUMN CHART -----------------------------------------------------//
-function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders)
+function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders)
 {
 
     var NS="http://www.w3.org/2000/svg";     
@@ -668,15 +740,139 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                             lr1a.setAttribute("stroke", "#000000");
                             lr1a.setAttribute("stroke-width", ".5");
                             svg.appendChild(lr1a);      
-                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
-                            lr1a.setAttribute("x1", 50+(barwidth*nextpos)+barwidth-barmargin);
-                            lr1a.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin);
-                            lr1a.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
-                            lr1a.setAttribute("y2", 50+(100*heightmultiplier));
-                            lr1a.setAttribute("stroke", "#000000"); 
-                            lr1a.setAttribute("stroke-width", ".5");
-                            svg.appendChild(lr1a);      
+                        var lr1ab =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1ab.setAttribute("x1", 50+(barwidth*nextpos)+barwidth-barmargin);
+                            lr1ab.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin);
+                            lr1ab.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                            lr1ab.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1ab.setAttribute("stroke", "#000000"); 
+                            lr1ab.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1ab);      
                     }                                  
+
+            //SHADING THE BORDERS
+            if (bShadeBorders == true)
+            {
+                 next_item_val=0;
+                 if (x+1 < mydata[0].length)
+                 {
+                    next_item_val=mydata[y][x+1];                 
+                 }
+                  else
+                 {
+                    if (y+1 < items.length)
+                    {
+                        next_item= mydata[y+1][0];                     
+                    }
+                 }
+            
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barwidth > 25) { shadectr=3; }
+                 if (barwidth > 35) { shadectr=4; }
+                 if (barwidth > 45) { shadectr=5; }
+                 if (barwidth > 55) { shadectr=6; }
+                 if (barwidth > 65) { shadectr=7; }
+                 origshadectr=shadectr;
+
+                 while (shadectr > 0)
+                 {                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", 50+(barwidth*nextpos)+shadectr);
+                            lr1.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin-shadectr);
+                            lr1.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))+shadectr );
+                            lr1.setAttribute("y2", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))+shadectr );
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", "1");
+                            svg.appendChild(lr1);   
+                        shadecolor=shade(shadecolor,"l");
+                        if (origshadectr > 4) { shadecolor=shade(shadecolor,"l"); }
+                        shadectr=shadectr-1;
+                 }   
+
+
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barwidth > 25) { shadectr=3; }
+                 if (barwidth > 35) { shadectr=4; }
+                 if (barwidth > 45) { shadectr=5; }
+                 if (barwidth > 55) { shadectr=6; }
+                 if (barwidth > 65) { shadectr=7; }
+                 origshadectr=shadectr;
+                 if (shadectr < 4) {shadecolor=shade(colorset[y],"l"); }
+
+                 while (shadectr >= 0) 
+                 {                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", 50+(barwidth*nextpos)+shadectr);
+                            lr1.setAttribute("x2", 50+(barwidth*nextpos)+shadectr);
+                            lr1.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))+shadectr);
+                            lr1.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", "d");
+                            svg.appendChild(lr1);   
+                        shadecolor=shade(shadecolor,"d");
+                    //    if (origshadectr > 4) { shadecolor=shade(shadecolor,"l"); }
+                        shadectr=shadectr-1;
+                 }  
+
+
+                 shade_darker_or_lighter="l"
+                 if ((next_item_val >= mydata[y][x])&&(barmargin<3)) { shade_darker_or_lighter="d"; }
+                 shadecolor=shade(colorset[y],"l");
+                 shadectr=2;
+                 if (barwidth > 25) { shadectr=3; }
+                 if (barwidth > 35) { shadectr=4; }
+                 if (barwidth > 45) { shadectr=5; }
+                 if (barwidth > 55) { shadectr=6; }
+                 if (barwidth > 65) { shadectr=7; }
+                 origshadectr=shadectr;
+                 if (shadectr < 4) {shadecolor=shade(colorset[y],shade_darker_or_lighter); }
+                 while (shadectr >= 0)
+                 {                  
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", 50+(barwidth*nextpos)+barwidth-barmargin-shadectr);
+                            lr1.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin-shadectr);
+                            lr1.setAttribute("y1", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))+shadectr);
+                            lr1.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1.setAttribute("stroke", shadecolor);
+                            lr1.setAttribute("stroke-width", shade_darker_or_lighter);
+                            svg.appendChild(lr1);  
+                            shadecolor=shade(shadecolor,shade_darker_or_lighter);
+                            //    if (origshadectr > 4) { shadecolor=shade(shadecolor,"l"); }
+                            shadectr=shadectr-1;
+                 }  
+                 if  ((next_item_val < mydata[y][x])&&(barmargin<3))
+                 {
+                         shadecolor=shade(colorset[y],"l");
+                         shadectr=2;
+                         if (barwidth > 25) { shadectr=3; }
+                         if (barwidth > 35) { shadectr=4; }
+                         if (barwidth > 45) { shadectr=5; }
+                         if (barwidth > 55) { shadectr=6; }
+                         if (barwidth > 65) { shadectr=7; }
+                         origshadectr=shadectr;
+                         if (shadectr < 4) {shadecolor=shade(colorset[y],"d"); }
+                         while (shadectr >= 0)
+                         {                  
+                                var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                                    lr1.setAttribute("x1", 50+(barwidth*nextpos)+barwidth-barmargin-shadectr);
+                                    lr1.setAttribute("x2", 50+(barwidth*nextpos)+barwidth-barmargin-shadectr);
+                                    lr1.setAttribute("y1", 50+(100*heightmultiplier- next_item_val*heightmultiplier*(100/max_value_on_scale))+shadectr);
+                                    lr1.setAttribute("y2", 50+(100*heightmultiplier));
+                                    lr1.setAttribute("stroke", shadecolor);
+                                    lr1.setAttribute("stroke-width", "d");
+                                    svg.appendChild(lr1);  
+                                    shadecolor=shade(shadecolor,"d");
+                                    //    if (origshadectr > 4) { shadecolor=shade(shadecolor,"l"); }
+                                    shadectr=shadectr-1;
+                         }    
+                 }
+                
+                       
+            }
+
+
 
                     var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
                         t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/3));
@@ -1089,43 +1285,47 @@ function calculate_mylinedata(max_value_on_scale,mylinedata)
 
 function shade(ncolor,dir)
 {
-    if (dir=="d")
+    if (ncolor.indexOf("#")>=0)
     {
-	    while  (ncolor.contains("1")){ncolor=ncolor.replace("1","0");}
-	    while  (ncolor.contains("2")){ncolor=ncolor.replace("2","1");}
-	    while  (ncolor.contains("3")){ncolor=ncolor.replace("3","2");}
-	    while  (ncolor.contains("4")){ncolor=ncolor.replace("4","3");}
-	    while  (ncolor.contains("5")){ncolor=ncolor.replace("5","4");}
-	    while  (ncolor.contains("6")){ncolor=ncolor.replace("6","5");}
-	    while  (ncolor.contains("7")){ncolor=ncolor.replace("7","6");}
-	    while  (ncolor.contains("8")){ncolor=ncolor.replace("8","7");}
-	    while  (ncolor.contains("9")){ncolor=ncolor.replace("9","8");}
-	    while  (ncolor.contains("a")){ncolor=ncolor.replace("a","9");}
-	    while  (ncolor.contains("b")){ncolor=ncolor.replace("b","a");}
-	    while  (ncolor.contains("c")){ncolor=ncolor.replace("c","b");}
-	    while  (ncolor.contains("d")){ncolor=ncolor.replace("d","c");}
-	    while  (ncolor.contains("e")){ncolor=ncolor.replace("e","d");}
-	    while  (ncolor.contains("f")){ncolor=ncolor.replace("f","e");}
-    }
-    else
-    {
-
-	    while  (ncolor.contains("e")){ncolor=ncolor.replace("e","f");}
-	    while  (ncolor.contains("d")){ncolor=ncolor.replace("d","e");}
-	    while  (ncolor.contains("c")){ncolor=ncolor.replace("c","d");}
-	    while  (ncolor.contains("b")){ncolor=ncolor.replace("b","c");}
-	    while  (ncolor.contains("a")){ncolor=ncolor.replace("a","b");}
-	    while  (ncolor.contains("9")){ncolor=ncolor.replace("9","a");}
-	    while  (ncolor.contains("8")){ncolor=ncolor.replace("8","9");}
-	    while  (ncolor.contains("7")){ncolor=ncolor.replace("7","8");}
-	    while  (ncolor.contains("6")){ncolor=ncolor.replace("6","7");}
-	    while  (ncolor.contains("5")){ncolor=ncolor.replace("5","6");}
-	    while  (ncolor.contains("4")){ncolor=ncolor.replace("4","5");}
-	    while  (ncolor.contains("3")){ncolor=ncolor.replace("3","4");}
-	    while  (ncolor.contains("2")){ncolor=ncolor.replace("2","3");}
-	    while  (ncolor.contains("1")){ncolor=ncolor.replace("1","2");}
-
-    }
-    return ncolor;
+	if (dir=="d")
+	{
+		while  (ncolor.indexOf("1")>=0){ncolor=ncolor.replace("1","0");}
+		while  (ncolor.indexOf("2")>=0){ncolor=ncolor.replace("2","1");}
+		while  (ncolor.indexOf("3")>=0){ncolor=ncolor.replace("3","2");}
+		while  (ncolor.indexOf("4")>=0){ncolor=ncolor.replace("4","3");}
+		while  (ncolor.indexOf("5")>=0){ncolor=ncolor.replace("5","4");}
+		while  (ncolor.indexOf("6")>=0){ncolor=ncolor.replace("6","5");}
+		while  (ncolor.indexOf("7")>=0){ncolor=ncolor.replace("7","6");}
+		while  (ncolor.indexOf("8")>=0){ncolor=ncolor.replace("8","7");}
+		while  (ncolor.indexOf("9")>=0){ncolor=ncolor.replace("9","8");}
+		while  (ncolor.indexOf("a")>=0){ncolor=ncolor.replace("a","9");}
+		while  (ncolor.indexOf("b")>=0){ncolor=ncolor.replace("b","a");}
+		while  (ncolor.indexOf("c")>=0){ncolor=ncolor.replace("c","b");}
+		while  (ncolor.indexOf("d")>=0){ncolor=ncolor.replace("d","c");}
+		while  (ncolor.indexOf("e")>=0){ncolor=ncolor.replace("e","d");}
+		while  (ncolor.indexOf("f")>=0){ncolor=ncolor.replace("f","e");}
+	}	
+	else
+	{
+		while  (ncolor.indexOf("e")>=0){ncolor=ncolor.replace("e","f");}
+		while  (ncolor.indexOf("d")>=0){ncolor=ncolor.replace("d","e");}
+		while  (ncolor.indexOf("c")>=0){ncolor=ncolor.replace("c","d");}
+		while  (ncolor.indexOf("b")>=0){ncolor=ncolor.replace("b","c");}
+		while  (ncolor.indexOf("a")>=0){ncolor=ncolor.replace("a","b");}
+		while  (ncolor.indexOf("9")>=0){ncolor=ncolor.replace("9","a");}
+		while  (ncolor.indexOf("8")>=0){ncolor=ncolor.replace("8","9");}
+		while  (ncolor.indexOf("7")>=0){ncolor=ncolor.replace("7","8");}
+		while  (ncolor.indexOf("6")>=0){ncolor=ncolor.replace("6","7");}
+		while  (ncolor.indexOf("5")>=0){ncolor=ncolor.replace("5","6");}
+		while  (ncolor.indexOf("4")>=0){ncolor=ncolor.replace("4","5");}
+		while  (ncolor.indexOf("3")>=0){ncolor=ncolor.replace("3","4");}
+		while  (ncolor.indexOf("2")>=0){ncolor=ncolor.replace("2","3");}
+		while  (ncolor.indexOf("1")>=0){ncolor=ncolor.replace("1","2");}
+	}
+	}
+return ncolor;
 }	
+
+
+
 
