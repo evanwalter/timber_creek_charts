@@ -75,8 +75,15 @@ if (my_new_chart.lineitems != null)
 
 var chart_label="";
 var chart_label_position="none";
+var chart_label_class="tcc_chartlabel";
 var bIsPercent=true;
-if (my_new_chart.chart_label != null) { chart_label = my_new_chart.chart_label; };
+if (my_new_chart.chart_label != null) 
+    { 
+        if (my_new_chart.chart_label.name != null) {  chart_label = my_new_chart.chart_label.name;  }  else { chart_label = my_new_chart.chart_label; }
+        if (my_new_chart.chart_label.class != null) {  chart_label_class = my_new_chart.chart_label.class;  }  
+        if (my_new_chart.chart_label.position != null) {  chart_label_position = my_new_chart.chart_label.position;  }         
+        
+    };
 if (my_new_chart.chart_label_position != null) { chart_label_position = my_new_chart.chart_label_position; };
 if (my_new_chart.ispercentage != null) { bIsPercent = my_new_chart.ispercentage; };
 
@@ -89,6 +96,7 @@ var valueformat="%d";
 var bBar_Borders=true;
 var bColumn_Borders=true;
 var bShade_Borders=false;
+var bHideTickMarks=false;
 
 if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.barmargin != null) { barmargin = my_new_chart.additionalsettings.barmargin; }
@@ -98,6 +106,8 @@ if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.columnborders != null) { bColumn_Borders = my_new_chart.additionalsettings.columnborders;  bBar_Borders = my_new_chart.additionalsettings.columnborders;}
     if (my_new_chart.additionalsettings.barborders != null) { bColumn_Borders = my_new_chart.additionalsettings.barborders;  bBar_Borders = my_new_chart.additionalsettings.barborders;}
     if (my_new_chart.additionalsettings.shadeborders != null) { bShade_Borders = my_new_chart.additionalsettings.shadeborders; }
+    if (my_new_chart.additionalsettings.hidetickmarks != null) { bHideTickMarks = my_new_chart.additionalsettings.hidetickmarks; }
+    if (my_new_chart.additionalsettings.showtickmarks != null) { if (my_new_chart.additionalsettings.showtickmarks==false) { bHideTickMarks=true; } }
     
     if (my_new_chart.additionalsettings.valueformat != null) 
 	{ valueformat= my_new_chart.additionalsettings.valueformat; }
@@ -109,18 +119,18 @@ if (my_new_chart.additionalsettings != null) {
 
 if (chart_type.toLowerCase()=="line")
     {
-	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,bShowLegend,bShowScales,chart_label,chart_label_position,bIsPercent,bShowBackground,valueformat)
+	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,bIsPercent,bShowBackground,valueformat)
     }
 if (chart_type.toLowerCase()=="bar")
     {
-    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders, bShade_Borders)
+    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders, bShade_Borders, bHideTickMarks)
     }
 if (chart_type.toLowerCase() == "column") {
-    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders)
+    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders, bHideTickMarks)
 }
 
 if (chart_type.toLowerCase() == "pie") {
-    build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata, myitemcolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent,bShowBackground,valueformat)
+    build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata, myitemcolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent,bShowBackground,valueformat)
 
 }
 }
@@ -131,7 +141,7 @@ if (chart_type.toLowerCase() == "pie") {
 
 
 //----------------------------------------- BUILD A LINE CHART -----------------------------------------------------//
-function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata,mylinecolors,bShowLegend,bShowScales,chart_label,chart_label_position,bIsPercent,bShowBackground,valueformat)
+function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata,mylinecolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,bIsPercent,bShowBackground,valueformat)
 {
     var NS="http://www.w3.org/2000/svg";
     var svg=document.createElementNS(NS,"svg");
@@ -164,7 +174,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 cl1.setAttribute("y", 25);
                 cl1.setAttribute("x", 50);
                 cl1.setAttribute("fill", "#333");
-                cl1.setAttribute("class","chartlabel");
+                cl1.setAttribute("class",chart_label_class);
                 cl1.textContent=chart_label;
                 svg.appendChild(cl1);
     }
@@ -176,7 +186,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 cl2.setAttribute("y",  chartheight+25);
                 cl2.setAttribute("x",  50);
                 cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class","chartlabel");
+                cl2.setAttribute("class",chart_label_class);
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
@@ -299,7 +309,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
 
 //----------------------------------------- BUILD A BAR CHART -----------------------------------------------------//
-function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders, bShadeBorders)
+function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders, bShadeBorders, bHideTickMarks)
 {
     var NS="http://www.w3.org/2000/svg";     
     var svg=document.createElementNS(NS,"svg");
@@ -338,7 +348,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                 cl1.setAttribute("y", 25);
                 cl1.setAttribute("x", 100);
                 cl1.setAttribute("fill", "#333");
-                cl1.setAttribute("class","chartlabel");
+                cl1.setAttribute("class",chart_label_class);
                 cl1.textContent=chart_label;
                 svg.appendChild(cl1);
     }
@@ -349,7 +359,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                 cl2.setAttribute("y", 50+chartheight+40);
                 cl2.setAttribute("x", 100);
                 cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class","chartlabel");
+                cl2.setAttribute("class",chart_label_class);
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
@@ -620,7 +630,7 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
 
 //----------------------------------------- BUILD A COLUMN CHART -----------------------------------------------------//
-function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders)
+function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders, bHideTickMarks)
 {
 
     var NS="http://www.w3.org/2000/svg";     
@@ -658,7 +668,7 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                 cl1.setAttribute("y", 25);
                 cl1.setAttribute("x", 50);
                 cl1.setAttribute("fill", "#333");
-                cl1.setAttribute("class","chartlabel");
+                cl1.setAttribute("class",chart_label_class);
                 cl1.textContent=chart_label;
                 svg.appendChild(cl1);
     }
@@ -670,7 +680,7 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                 cl2.setAttribute("y", chartheight-40);
                 cl2.setAttribute("x", 50);
                 cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class","chartlabel");
+                cl2.setAttribute("class",chart_label_class);
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
@@ -754,18 +764,28 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
             if (bShadeBorders == true)
             {
                  next_item_val=0;
-                 if (x+1 < mydata[0].length)
+//                 if (y+1 < mydata[0].length)
+//                 {
+//                    next_item_val=mydata[y][x+1];                 
+//                 }
+//                  else
+//                 {
+//                    if (x+1 < items.length)
+//                    {
+//                        next_item_val= mydata[y+1][0];                     
+//                    }
+//                 }
+                 if (y+1 < mydata.length)
                  {
-                    next_item_val=mydata[y][x+1];                 
+                     next_item_val= mydata[y+1][x];                 
                  }
                   else
                  {
-                    if (y+1 < items.length)
+                    if (x+1 <= items[0].length)
                     {
-                        next_item= mydata[y+1][0];                     
+                          next_item_val=mydata[0][x+1];                   
                     }
                  }
-            
                  shadecolor=shade(colorset[y],"l");
                  shadectr=2;
                  if (barwidth > 25) { shadectr=3; }
@@ -842,8 +862,9 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                             //    if (origshadectr > 4) { shadecolor=shade(shadecolor,"l"); }
                             shadectr=shadectr-1;
                  }  
-                 if  ((next_item_val < mydata[y][x])&&(barmargin<3))
+                 if  ((next_item_val <= mydata[y][x]) && (barmargin<3) && (next_item_val > 0))
                  {
+                         
                          shadecolor=shade(colorset[y],"l");
                          shadectr=2;
                          if (barwidth > 25) { shadectr=3; }
@@ -884,14 +905,17 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                         svg.appendChild(t1);
                 }            
 
-                var t2 =document.createElementNS("http://www.w3.org/2000/svg", "line");
-                    t2.setAttribute("x1", 50+(barwidth*x*items.length));
-                    t2.setAttribute("x2", 50+(barwidth*x*items.length));
-                    t2.setAttribute("y1", 50+((20*heightmultiplier)*5));
-                    t2.setAttribute("y2", 50+((20*heightmultiplier)*5)+5);  
-                    t2.setAttribute("stroke", "#222");  
-                    svg.appendChild(t2);  
-                
+                // TICK MARKS
+                if (bHideTickMarks== false)
+                {
+                    var t2 =document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        t2.setAttribute("x1", 50+(barwidth*x*items.length));
+                        t2.setAttribute("x2", 50+(barwidth*x*items.length));
+                        t2.setAttribute("y1", 50+((20*heightmultiplier)*5));
+                        t2.setAttribute("y2", 50+((20*heightmultiplier)*5)+5);  
+                        t2.setAttribute("stroke", "#222");  
+                        svg.appendChild(t2);  
+                }
                 var ipt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
                     ipt1.setAttribute("x", 50+(barwidth*x*items.length)+10);
                     ipt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20);
@@ -1050,7 +1074,7 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
 
 
 
-function build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydatainput, colors, bShowLegend, bShowScales, chart_label, chart_label_position, bIsPercent, bShowBackground, valueformat) {
+function build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydatainput, colors, bShowLegend, bShowScales, chart_label, chart_label_class, chart_label_position, bIsPercent, bShowBackground, valueformat) {
     var NS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("width", svgwidth);
@@ -1270,7 +1294,13 @@ function calculate_mylinedata(max_value_on_scale,mylinedata)
 	{
 		if(parseInt(max_value_on_scale)<100)
 		{
-			max_value_on_scale=parseInt(max_value_on_scale/20)*20+20;
+		    if (parseInt(max_value_on_scale)<20)
+		    {
+			    max_value_on_scale=parseInt(max_value_on_scale)+5;		    
+		    } else
+		    {
+			    max_value_on_scale=parseInt(max_value_on_scale/20)*20+20;
+			}
 		}
 	} else
 	{
