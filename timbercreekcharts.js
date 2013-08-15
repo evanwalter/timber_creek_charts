@@ -2,21 +2,7 @@ function build_a_timber_creek_chart(my_new_chart)
 {
 
 var default_colors = ["#8675ef","#1020fe","#6364fe","#4264fe","#9764f6","#5397fe","#5253ef","#3141ff","#6474fe","",""];
-/*
-      var my_new_chart = {
-          "div_id": "div1",  // REQUIRED
-          "dimensions": { "height": 400, "width": 700 },
-          "charttype": "bar",  // "bar","column" or "line"
-          "items": [{ "name": "Males", "color": "red", "format": "bar" }, { "name": "Females", "color": "blue" }],  // REQUIRED
-          "itempoints": ["North", "South", "East", "West"],     // REQUIRED 
-          "data": [[41, 25, 55, 75], [75, 85, 64, 77]],   // REQUIRED
-          "ispercentage": true,
-          "chart_label": "Q1.) In which region of the country do you live?",
-          "chart_label_position": "top",   // "top","bottom","none"
-          "chart_footnote": "",
-          "display_footnote": false
-      };
-*/
+
 var div_id=my_new_chart.div_id;
 var svgwidth=my_new_chart.dimensions.width;
 var svgheight=my_new_chart.dimensions.height;
@@ -39,7 +25,6 @@ var mydata = my_new_chart.data;
 if (mydata[0] instanceof Array == false)
 {
    mydata=[mydata];
-   
 };
 
 var myitempts = new Array(mydata[0].length);
@@ -87,6 +72,18 @@ if (my_new_chart.chart_label != null)
 if (my_new_chart.chart_label_position != null) { chart_label_position = my_new_chart.chart_label_position; };
 if (my_new_chart.ispercentage != null) { bIsPercent = my_new_chart.ispercentage; };
 
+var footnotes="";
+var footnotes_class="tcc_footnote";
+if (my_new_chart.footnotes != null) 
+    { 
+        if (my_new_chart.footnotes.name != null) {  footnotes = my_new_chart.footnotes.name;  }  else { footnotes = my_new_chart.footnotes; }
+        if (my_new_chart.footnotes.class != null) {  footnotes_class = my_new_chart.footnotes.class;  }     
+    };
+if (my_new_chart.chart_footnote != null) 
+    { 
+        if (my_new_chart.chart_footnote.name != null) {  footnotes = my_new_chart.chart_footnote.name;  }  else { footnotes = my_new_chart.chart_footnote; }
+        if (my_new_chart.chart_footnote.class != null) {  footnotes_class = my_new_chart.chart_footnote.class;  }     
+    };
 
 var barmargin = 1;
 var bShowLegend=true;
@@ -119,18 +116,18 @@ if (my_new_chart.additionalsettings != null) {
 
 if (chart_type.toLowerCase()=="line")
     {
-	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,bIsPercent,bShowBackground,valueformat)
+	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,footnotes,footnotes_class,bIsPercent,bShowBackground,valueformat)
     }
 if (chart_type.toLowerCase()=="bar")
     {
-    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders, bShade_Borders, bHideTickMarks)
+    build_bar_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class,bIsPercent, barmargin, bShowBackground, valueformat, bBar_Borders, bShade_Borders, bHideTickMarks)
     }
 if (chart_type.toLowerCase() == "column") {
-    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders, bHideTickMarks)
+    build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders, bHideTickMarks)
 }
 
 if (chart_type.toLowerCase() == "pie") {
-    build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata, myitemcolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent,bShowBackground,valueformat)
+    build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata, myitemcolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent,bShowBackground,valueformat)
 
 }
 }
@@ -141,7 +138,8 @@ if (chart_type.toLowerCase() == "pie") {
 
 
 //----------------------------------------- BUILD A LINE CHART -----------------------------------------------------//
-function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata,mylinecolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,bIsPercent,bShowBackground,valueformat)
+function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata,mylinecolors,bShowLegend,bShowScales,
+    chart_label,chart_label_class,chart_label_position,footnotes,footnotes_class,bIsPercent,bShowBackground,valueformat)
 {
     var NS="http://www.w3.org/2000/svg";
     var svg=document.createElementNS(NS,"svg");
@@ -190,7 +188,23 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
-
+    // FOOTNOTES
+    if (footnotes!="")
+    {
+        afootnotes=footnotes.split("\n");       
+        vpos=0;
+        for (f=0; f < afootnotes.length; f++)
+        {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", chartheight-20+vpos);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",footnotes_class);
+                cl2.textContent=afootnotes[f];
+                svg.appendChild(cl2);
+            vpos+=9;
+        }
+    }
     // BACKGROUND
     if (bShowBackground == true)
     {
@@ -309,8 +323,10 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
 
 //----------------------------------------- BUILD A BAR CHART -----------------------------------------------------//
-function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders, bShadeBorders, bHideTickMarks)
+function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, 
+chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bBarBorders, bShadeBorders, bHideTickMarks)
 {
+    
     var NS="http://www.w3.org/2000/svg";     
     var svg=document.createElementNS(NS,"svg");
 
@@ -363,8 +379,36 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
-
-
+    
+    
+    // FOOTNOTES
+    if (footnotes!="")
+    {
+        afootnotes=footnotes.split("\n");       
+        vpos=0;
+        for (f=0; f < afootnotes.length; f++)
+        {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", 50+chartheight+20+vpos);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",footnotes_class);
+                cl2.textContent=afootnotes[f];
+                svg.appendChild(cl2);
+            vpos+=9;
+        }
+    }
+    // BACKGROUND
+    if (bShowBackground == true)
+    {
+        var bkgrd =document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            bkgrd.setAttribute("x", 100);
+            bkgrd.setAttribute("width", chartwidth-50);
+            bkgrd.setAttribute("y", 50);
+            bkgrd.setAttribute("height", chartheight);
+            bkgrd.setAttribute("fill", "#efefff");
+            svg.appendChild(bkgrd);
+    }    
     //---------------  VERTICAL LINES -------------------------------------//
     if (bVerticalLines)
     {
@@ -507,9 +551,15 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
             var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
             t1.setAttribute("x", margin_left + (mydata[y][x] * widthmultiplier * (100 / max_value_on_scale)) + 5);
-                t1.setAttribute("y", 50+(barheight*nextpos)+15);
+                t1.setAttribute("y", 50+(barheight*nextpos)+(barheight/2));
                 t1.setAttribute("fill", "#333");
-                t1.setAttribute("class","values");
+                if (barheight < 30)
+                {
+                    t1.setAttribute("class","tcc_values");
+                } else
+                {
+                     t1.setAttribute("class","tcc_values_1");
+                }
               
                 t1.textContent = valueformat.replace("%d", mydata[y][x]).replace("[[value]]", mydata[y][x]).replace("[value]", mydata[y][x]);// + percentage_suffix;
                 svg.appendChild(t1);
@@ -628,9 +678,10 @@ function build_bar_chart(div_id, svgwidth, svgheight, items, lineitems, myitempt
 
 
 
-
+//----------------------------------------------------------------------------------------------------------------------------------------------//
 //----------------------------------------- BUILD A COLUMN CHART -----------------------------------------------------//
-function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray, chart_label,chart_label_class, chart_label_position, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders, bHideTickMarks)
+function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray,
+chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders, bHideTickMarks)
 {
 
     var NS="http://www.w3.org/2000/svg";     
@@ -672,7 +723,6 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                 cl1.textContent=chart_label;
                 svg.appendChild(cl1);
     }
-    
     // LABEL ON BOTTOM
     if (chart_label_position=="bottom")
     {
@@ -684,7 +734,35 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                 cl2.textContent=chart_label;
                 svg.appendChild(cl2);
     }
-
+    // FOOTNOTES
+    if (footnotes!="")
+    {
+        afootnotes=footnotes.split("\n");       
+        vpos=0;
+        for (f=0; f < afootnotes.length; f++)
+        {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", chartheight-20+vpos);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",footnotes_class);
+                cl2.textContent=afootnotes[f];
+                svg.appendChild(cl2);
+            vpos+=9;
+        }
+    }
+    // BACKGROUND
+    if (bShowBackground == true)
+    {
+        var bkgrd =document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            bkgrd.setAttribute("x", 50);
+            bkgrd.setAttribute("width", chartwidth-80);
+            bkgrd.setAttribute("y", 50);
+//            bkgrd.setAttribute("height", chartheight-150);
+            bkgrd.setAttribute("height", max_value_on_scale*heightmultiplier);
+            bkgrd.setAttribute("fill", "#efefff");
+            svg.appendChild(bkgrd);
+    }
     //---------------  HORIZONTAL LINES -------------------------------------//
     if (bHorizontalLines)
     {
@@ -764,17 +842,6 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
             if (bShadeBorders == true)
             {
                  next_item_val=0;
-//                 if (y+1 < mydata[0].length)
-//                 {
-//                    next_item_val=mydata[y][x+1];                 
-//                 }
-//                  else
-//                 {
-//                    if (x+1 < items.length)
-//                    {
-//                        next_item_val= mydata[y+1][0];                     
-//                    }
-//                 }
                  if (y+1 < mydata.length)
                  {
                      next_item_val= mydata[y+1][x];                 
@@ -894,13 +961,17 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
             }
 
 
-
+                    // ADDING THE VALUES TO THE BARS
                     var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                        t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/3));
+                        //t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/3));
+                        t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/2)-10);
                         t1.setAttribute("y", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))-4);
                         t1.setAttribute("fill", "#333");
                         t1.setAttribute("style", "font: 'Arial' 6px");
-                        t1.setAttribute("class","values");
+                       // t1.setAttribute("class","values");
+                        if (barwidth > 40) { t1.setAttribute("class","tcc_values_2");    } 
+                        if (barwidth > 30) { t1.setAttribute("class","tcc_values_1");  } 
+                        if (barwidth <= 30) { t1.setAttribute("class","tcc_values"); }
                         t1.textContent = valueformat.replace("%d", mydata[y][x]).replace("[[value]]", mydata[y][x]).replace("[value]", mydata[y][x]); //mydata[y][x] + percentage_suffix;
                         svg.appendChild(t1);
                 }            
@@ -920,7 +991,14 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
                     ipt1.setAttribute("x", 50+(barwidth*x*items.length)+10);
                     ipt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20);
                     ipt1.setAttribute("fill", "#333");
-                    ipt1.setAttribute("class","values");
+                    //ipt1.setAttribute("class","values");
+                    if (barwidth < 30)
+                    {
+                        ipt1.setAttribute("class","tcc_values");
+                    } else
+                    {
+                        ipt1.setAttribute("class","tcc_values_1");
+                    }
                     
 		        var nextitempt=myitempts[x].split("\n");
 		       // alert(myitempts[x]+" " +myitempts[x].length + "  " +barwidth+" " + items.length);
@@ -1074,7 +1152,8 @@ function build_column_chart(div_id, svgwidth, svgheight, items, lineitems, myite
 
 
 
-function build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydatainput, colors, bShowLegend, bShowScales, chart_label, chart_label_class, chart_label_position, bIsPercent, bShowBackground, valueformat) {
+function build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydatainput, colors, bShowLegend, bShowScales,
+chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, bShowBackground, valueformat) {
     var NS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("width", svgwidth);
@@ -1129,6 +1208,23 @@ function build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata
         cl2.textContent = chart_label;
         svg.appendChild(cl2);
     }
+    // FOOTNOTES
+    if (footnotes!="")
+    {
+        afootnotes=footnotes.split("\n");       
+        vpos=0;
+        for (f=0; f < afootnotes.length; f++)
+        {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", chartheight-20+vpos);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",footnotes_class);
+                cl2.textContent=afootnotes[f];
+                svg.appendChild(cl2);
+            vpos+=9;
+        }
+    }   
     // BACKGROUND
     if (bShowBackground == true)
     {
