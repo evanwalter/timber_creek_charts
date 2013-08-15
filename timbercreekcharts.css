@@ -7,6 +7,21 @@
      
      }
 
+    .tcc_values
+    {
+     font-family: Arial; 
+     font-size: 7pt; 
+     }
+    .tcc_values_1
+    {
+     font-family: Arial; 
+     font-size: 8pt; 
+     }
+    .tcc_values_2
+    {
+     font-family: Arial; 
+     font-size: 10pt; 
+     }
     .circlevalues
     {
     
@@ -36,6 +51,13 @@
      font-size: 10pt; 
      
      }
+
+    .tcc_footnote
+    {
     
+     font-family: Arial; 
+     font-size: 7pt; 
+     
+     }    
     </style>
     
