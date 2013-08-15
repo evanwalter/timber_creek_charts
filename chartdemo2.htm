@@ -4,18 +4,93 @@
     <title>Untitled Page</title>
     
     <script type="text/javascript" src="timbercreekcharts.js"></script>
-<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>    
     </style>
     
 </head>
 <body>
 
 <div>
-        <div id="divtest" style="float:left;">
+        <div>
+        <div>
+            <textarea style="width:900px; height: 200px; border: 1px; overflow:auto; font-size:small;">
+             var my_new_chart = {
+          "div_id": "divtestsimple",
+          "dimensions": { "height": 400, "width": 550 },
+          "charttype": "bar",
+          "items": [{ "name": "Males"}, { "name": "Females" }],
+          "data": [[41, 25, 55, 75], [75, 68, 18, 99]]
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+     </textarea>        
         </div>
-        <div id="divtest1" style="float:left;">
+        <div id="divtestsimple" style="float:none; clear:both">
         </div>
-<br />
+        
+        </div>
+
+
+        <div id="div1" style="float:left;">
+            <div id="div2" style="float:none; clear:both">
+            <textarea style="width:600px; height: 300px; border: 1px; overflow:auto; font-size:small;">
+            
+
+      var my_new_chart = {
+          "div_id": "divtest",
+          "dimensions": { "height": 400, "width": 550 },
+          "charttype": "bar",
+          "items": [{ "name": "Males", "color": "#525252", "format": "bar" }, 
+                    { "name": "Females", "color": "#868586" }],
+          "itempoints": ["North", "South", "East", "West"],   
+          "data": [[41, 25, 55, 175], [75, 685, 1864, 1077]],  
+          "ispercentage": false,
+          "chart_label": "How much do you spend on average per month?",
+          "chart_label_position": "top",   // "top","bottom","none"
+          "chart_footnote": "",
+          "display_footnote": false,          
+          "additionalsettings": { "showbackground" : true, "valueformat" : "$%d per month" }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+
+            </textarea>
+            </div>
+       
+        
+            <div id="divtest" style="float:none; clear:both">
+            </div>
+        </div>
+        <div id="div3" style="float:left;">
+            <div id="div4" style="float:none; clear:both;">
+            <textarea style="width:600px; height: 300px; border: 1px; overflow:auto; font-size:small;">
+            
+      var my_new_chart = {
+          "div_id": "divtest1",
+          "dimensions": { "height": 600, "width": 600 },
+          "charttype": "pie",
+          "items": [{ "name": "Set 1", "color": "#424242" }, { "name": "Set 2", "color": "#578656" }, 
+			{ "name": "Set 3", "color": "#313131" }, { "name": "Set 4", "color": "#b4b4b4" }
+			, { "name": "Set 5", "color": "#818181" }, { "name": "Set 6", "color": "#a7b8a8" }],  
+          "data": [654,510,716,2106,1535,753],
+          "ispercentage": false,
+          "chart_label": "In which set do you belong?",
+          "chart_label_position": "top", 
+          "chart_footnote": "",
+          "display_footnote": false,
+          "additionalsettings": { "showbackground" : false, "valueformat" : "$%d" }
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+            </textarea>
+            
+            </div>
+        
+            <div id="divtest1" style="float:none; clear:both;">
+            </div>
+        </div>
+</div>
+<div  style="float:none; clear: both">
         <div id="divtest2" style="float:left;">
         </div>
         
@@ -29,6 +104,17 @@
 <script type="text/javascript">
 
       var my_new_chart = {
+          "div_id": "divtestsimple",
+          "dimensions": { "height": 400, "width": 550 },
+          "charttype": "bar",
+          "items": [{ "name": "Males" }, { "name": "Females" }],
+          //"itempoints": ["North", "South", "East", "West"],   
+          "data": [[41, 25, 55, 75], [75, 68, 18, 99]]
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
           "div_id": "divtest",
           "dimensions": { "height": 400, "width": 550 },
           "charttype": "bar",
@@ -40,13 +126,13 @@
           "chart_label_position": "top",   // "top","bottom","none"
           "chart_footnote": "",
           "display_footnote": false,          
-          "additionalsettings": { "showbackground" : true, "valueformat" : "$%d per month" }
+          "additionalsettings": { "showbackground" : true, "valueformat" : "$%d per month" , "shadeborders" : true}
       };
 
       build_a_timber_creek_chart(my_new_chart);
 
 
-      var my_new_chart = {
+      var my_new_chart = {a
           "div_id": "divtest1",
           "dimensions": { "height": 600, "width": 600 },
           "charttype": "pie",
@@ -72,7 +158,7 @@
           "charttype": "column",
           "items": [{ "name": "Males", "color": "#9870e8", "format": "bar" }, { "name": "Females", "color": "#fe9ed9" }],
           "itempoints": ["It never has ever happened that way, and I doubt that it ever will", "Sometimes it happens that way", "It rarely ever happens that way", "It never ever happens that way"],   
-          "data": [[41, 25, 55, 75], [75,63, 42, 78]],  
+          "data": [[41, 25, 55, 75], [5,63, 42, 78]],  
           "ispercentage": true,
           "chart_label": "How much do you spend on average per month?",
           "chart_label_position": "top",   // "top","bottom","none"
@@ -96,7 +182,7 @@
           "chart_label_position": "top",   // "top","bottom","none"
           "chart_footnote": "",
           "display_footnote": false,          
-          "additionalsettings": { "showbackground" : true }
+          "additionalsettings": { "showbackground" : true, "shadeborders" : true }
       };
 
       build_a_timber_creek_chart(my_new_chart);
