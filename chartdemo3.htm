@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>Untitled Page</title>
+     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  
+       
+    <script type="text/javascript" src="timbercreekcharts.js"></script>
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+    </style>
+    
+    <script type="text/javascript">
+    
+//    
+//    $(document).ready(function() {
+//   $('div').mouseenter(function() {
+//       $(this).animate({
+//           height: '+=10px'
+//       });
+//   });
+//   $('div').mouseleave(function() {
+//       $(this).animate({
+//           height: '-=10px'
+//       }); 
+//   });
+//   $('div').click(function() {
+//       $(this).toggle(1000);
+//   }); 
+//});
+    
+    </script>
+    
+<style>
+    div
+	{
+    border-top: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    border-radius: 5px;
+    margin: 3px;
+    color: Navy;		
+	}
+
+    invisible
+	{
+    border-top: 0px none transparent;
+    border-left: 0px none transparent;
+    border-bottom: 0px none transparent;
+    border-right: 0px none transparent;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    margin: 3px;
+    color: Navy;		
+	}
+
+	select
+    {
+    border-top: .5px solid #000000;
+    border-left: .5px none #000000;
+    border-bottom: .5px none #000000;
+    border-right: .5px none #000000;
+    background-color: Transparent;
+    font-family: Arial;
+    font-size: 8pt;     
+    font-weight: normal; 
+    color: navy;
+    width:auto;   
+    }
+    
+    p.pclass
+    {
+    font-family: Tahoma;
+    font-size: 11pt;     
+    font-weight: bold;     
+    
+    }
+</style>
+
+
+</head>
+<body>
+
+<div class='invisible' style="border: none 0px;">
+        <div id="divtest1a" style="float:left; ">
+        </div>
+        <div id="divtest1b" style="float:left;">
+        </div>
+        <div id="divtest1c" style="float:left;">
+        </div>
+        <div id="divtest1d" style="float:left;">
+        </div>
+</div>
+<div class='invisible' style="border: none 0px;">
+        <div id="divtest2a" style="float:left;">
+        </div>
+        <div id="divtest2b" style="float:left;">
+        </div>
+</div>
+<div class='invisible' style="border: none 0px;">
+        <div id="divtest3a" style="float:left;">
+        </div>
+</div>
+
+  <script type="text/javascript">
+  
+  
+
+  
+
+      var my_new_chart = {
+          "div_id": "divtest1a",
+          "dimensions": { "height": 300, "width": 650 },
+          "charttype": "line",
+          "items": [{ "name": "Males 25-34", "color": "#ffff0f", "format": "bar" }, 
+                    { "name": "Males 35-44", "color": "#ff0f0f", "format": "bar" }, 
+                    { "name": "Females 25-34", "color": "#1f2fff" }, 
+                    { "name": "Females 35-44", "color": "#2fff1f" }], 
+          "itempoints": ["North", "South", "East", "West"],   
+          "data": [[41, 25, 55, 65], [45, 64, 52, 71], [75, 85, 64, 77], [65, 55, 44, 67]],  
+          "ispercentage": true,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",
+          "chart_footnote": "",
+          "display_footnote": false,   
+	  "backgroundcolor" : "#aba",  
+	  "linecolor" : "#111",    
+          "additionalsettings": { "showbackground" : true }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+
+      my_new_chart.div_id="divtest1b";
+      my_new_chart.charttype="column"; 
+      my_new_chart.additionalsettings.barmargin=6;
+
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.div_id="divtest1c";
+      my_new_chart.charttype="bar";
+      build_a_timber_creek_chart(my_new_chart);
+
+      my_new_chart.div_id="divtest2a";
+      my_new_chart.charttype="column";
+      
+      my_new_chart.items[0].color="#4467ef";
+      my_new_chart.items[1].color="#2245ff";
+      my_new_chart.items[2].color="#6689fe";
+      my_new_chart.items[3].color="#0032ff";
+      my_new_chart.additionalsettings.barmargin=2;
+      my_new_chart.additionalsettings.shadeborders=true; 
+      my_new_chart.dimensions.width=750;     
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
+          "div_id": "divtest1d",
+          "dimensions": { "height": 300, "width": 650 },
+          "charttype": "line",
+          "items": [{ "name": "Males 25-34", "color": "#ffff0f", "format": "bar" }, 
+                    { "name": "Males 35-44", "color": "#ff0f0f", "format": "bar" }, 
+                    { "name": "Females 25-34", "color": "#1f2fff" }, 
+                    { "name": "Females 35-44", "color": "#2fff1f" }], 
+          "itempoints": ["North", "South", "East", "West"],   
+          "data": [[25, 35, 55, 65], [40, 20, 52, 71], [15, 30, 64, 77], [20, 15, 44, 67]],  
+          "ispercentage": false,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",
+          "chart_footnote": "",
+          "display_footnote": false,          
+          "additionalsettings": { "showbackground" : true }
+      };
+
+      my_new_chart.div_id="divtest1d";
+      my_new_chart.charttype="stacked";
+    
+      build_a_timber_creek_chart(my_new_chart);
+
+
+      var my_new_chart = {
+          "div_id": "divtest2b",
+          "dimensions": { "height": 300, "width": 550 },
+          "charttype": "bar",
+          "items": [{ "name": "Males 25-34", "color": "#4467ef", "format": "bar" }, 
+                    { "name": "Males 35-44", "color": "#2245ff", "format": "bar" }, 
+                    { "name": "Females 25-34", "color": "#6689fe" }, 
+                    { "name": "Females 35-44", "color": "#0032ff" }], 
+          "itempoints": ["North", "South", "East", "West"],   
+          "data": [[25, 35, 55, 65], [40, 20, 52, 71], [15, 30, 64, 77], [20, 15, 44, 67]],  
+          "ispercentage": false,
+          "chart_label": "Q1.) In which region of the country do you live?",
+          "chart_label_position": "top",
+          "chart_footnote": "",
+          "display_footnote": false,          
+          "additionalsettings": { "barmargin": "8","showscales" : false , "showbackground" : false }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+
+
+      var my_new_chart = {
+          "div_id": "divtest3a",
+          "dimensions": { "height": 300, "width": 500 },
+          "charttype": "line",
+          "items": [{ "name": "item 1", "color": "#4467ef", "format": "bar" }, 
+                    { "name": "item 2", "color": "#1245ee", "format": "bar" }], 
+          "itempoints": ["Jan", "Feb", "Mar", "Apr","May", "June","July","Aug","Sep","Oct","Nov","Dec"],   
+          "data": [[25, 34,55,66,64,77,35,44,52,24,25,45], [40,53,35, 20,55,66,6,44,55,66,53,4]],  
+          "ispercentage": false,
+          "chart_label": "",
+	  "backgroundcolor" : "#000",
+	  "chart_label_position": "top",
+          "chart_footnote": "",
+          "display_footnote": false,          
+          "additionalsettings": { "barmargin": "8","showscales" : true, "showbackground" : true, "showlegend" : true }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+
+  </script>
+
+</body>
+</html>
