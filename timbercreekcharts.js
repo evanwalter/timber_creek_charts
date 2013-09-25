@@ -1,5 +1,19 @@
+var tcc_background_color;
+
+var tick_shape="circle"; // line chart only
+
 function build_a_timber_creek_chart(my_new_chart)
 {
+tcc_background_color="#efefff"
+tcc_line_color="#000"
+
+if (my_new_chart.backgroundcolor != null) { tcc_background_color=my_new_chart.backgroundcolor; }
+if (my_new_chart.backgroundColor != null) { tcc_background_color=my_new_chart.backgroundColor; }
+if (my_new_chart.background_color != null) { tcc_background_color=my_new_chart.background_color; }
+
+if (my_new_chart.linecolor != null) { tcc_line_color=my_new_chart.linecolor; }
+if (my_new_chart.lineColor != null) { tcc_line_color=my_new_chart.lineColor; }
+if (my_new_chart.line_color != null) { tcc_line_color=my_new_chart.line_color; }
 
 var default_colors = ["#8675ef","#1020fe","#6364fe","#4264fe","#9764f6","#5397fe","#5253ef","#3141ff","#6474fe","",""];
 
@@ -18,7 +32,8 @@ for (x=0; x < my_new_chart.items.length;x++)
 
 for (x=0; x < my_new_chart.items.length;x++)
 {
-	if(my_new_chart.items[x].color != null) {  myitemcolors[x]=my_new_chart.items[x].color; }else {myitemcolors[x]="blue"; }
+    mycolor=check_color(my_new_chart.items[x].color);
+	if(my_new_chart.items[x].color != null) {  myitemcolors[x]=mycolor }else {myitemcolors[x]="#0000ff"; }
 }
 
 var mydata = my_new_chart.data;
@@ -125,6 +140,9 @@ if (chart_type.toLowerCase()=="bar")
 if (chart_type.toLowerCase() == "column") {
     build_column_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders, bHideTickMarks)
 }
+if (chart_type.toLowerCase() == "stacked") {
+    build_stacked_chart(div_id, svgwidth, svgheight, myitems, mylineitems, myitempts, mydata, mylinedata, myitemcolors, mylinecolors, bShowLegend, bShowScales, false, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShade_Borders, bHideTickMarks)
+}
 
 if (chart_type.toLowerCase() == "pie") {
     build_pie_chart(div_id, svgwidth, svgheight, myitems, myitempts, mydata, myitemcolors, bShowLegend, bShowScales, chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent,bShowBackground,valueformat)
@@ -148,10 +166,11 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
     bHorizontalLines=bShowScales;
 
-    var chartwidth=svgwidth;
-    var chartheight=svgheight-100;
+    var chartwidth=svgwidth-25;
+//    var chartheight=svgheight-100;
+    var chartheight=svgheight-(svgheight/4);
 
-    if (bShowLegend) { chartwidth=chartwidth-200; }
+    if (bShowLegend) { chartwidth=chartwidth-150; }
 
     var max_value_on_scale=100;
     percentage_suffix="%";
@@ -210,13 +229,13 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
     {
         var bkgrd =document.createElementNS("http://www.w3.org/2000/svg", "rect");
             bkgrd.setAttribute("x", 50);
-            bkgrd.setAttribute("width", chartwidth-linewidth);
             bkgrd.setAttribute("y", 50);
-            bkgrd.setAttribute("height", chartheight-150);
-            bkgrd.setAttribute("fill", "#efefff");
+            bkgrd.setAttribute("width", chartwidth-linewidth);
+//            bkgrd.setAttribute("height", chartheight-150);
+            bkgrd.setAttribute("height", max_value_on_scale*heightmultiplier);
+            bkgrd.setAttribute("fill", tcc_background_color);
             svg.appendChild(bkgrd);
     }
-
     //--------------- HORIZONTAL LINES-------------------------------------//
     if (bHorizontalLines)
     {
@@ -231,7 +250,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 l1.setAttribute("x2", 50+chartwidth-linewidth);
                 l1.setAttribute("y1", 50+((tickcount*heightmultiplier)*x));
                 l1.setAttribute("y2", 50+((tickcount*heightmultiplier)*x));
-                l1.setAttribute("stroke", "#000");
+                l1.setAttribute("stroke", tcc_line_color);
                 l1.setAttribute("stroke-width", ".1");
                 svg.appendChild(l1);  
 
@@ -249,7 +268,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 l1.setAttribute("x2", 50+chartwidth-linewidth);
                 l1.setAttribute("y1", 50+((tickcount*heightmultiplier)*tickcounter));
                 l1.setAttribute("y2", 50+((tickcount*heightmultiplier)*tickcounter));
-                l1.setAttribute("stroke", "#000");
+                l1.setAttribute("stroke", tcc_line_color);
                 l1.setAttribute("stroke-width", ".1");
                 svg.appendChild(l1);  
     }
@@ -258,9 +277,10 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
     //--------------- ADD THE DATA LINES-------------------------------------//
     for (x=0; x < mylinedata[0].length; x++)
     {
-        if (x < mylinedata[0].length-1)
+
+        for (y=0; y< mylinedata.length; y++)
         {
-            for (y=0; y< mylinedata.length; y++)
+            if (x < mylinedata[0].length-1)
             {
                 var mld2 =document.createElementNS("http://www.w3.org/2000/svg", "line");
                 mld2.setAttribute("x1", 50+(linewidth*x));
@@ -269,6 +289,16 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 mld2.setAttribute("y2", 50+(100*heightmultiplier- (100/max_value_on_scale)*mylinedata[y][x+1]*heightmultiplier));  
                 mld2.setAttribute("stroke", mylinecolors[y]);  
                 svg.appendChild(mld2);  
+            }               
+            // ADD THE CIRCLE
+            if (tick_shape=="circle")
+            {
+                var cd2=document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                cd2.setAttribute("cx",50+(linewidth*x));
+                cd2.setAttribute("cy",50+(100*heightmultiplier- (100/max_value_on_scale)*mylinedata[y][x]*heightmultiplier));
+                cd2.setAttribute("r",2);
+                cd2.setAttribute("fill",mylinecolors[y]);
+                svg.appendChild(cd2);  
             }
         }
 
@@ -298,14 +328,14 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
         for (x=0;x < myitems.length;x++)
         {
             var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                lr1.setAttribute("x", chartwidth+5);
+                lr1.setAttribute("x", 50+chartwidth-linewidth+10);
                 lr1.setAttribute("width", 10);
                 lr1.setAttribute("y", 50+(x*15));
                 lr1.setAttribute("height", 10);
                 lr1.setAttribute("fill", mylinecolors[x]);
                 svg.appendChild(lr1);
             var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                lt1.setAttribute("x", chartwidth+20);
+                lt1.setAttribute("x", 50+chartwidth-linewidth+25);
                 lt1.setAttribute("y", 50+(x*15)+10);
                 lt1.setAttribute("fill", "#333");
                 lt1.setAttribute("class","legendtext");
@@ -403,10 +433,10 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
     {
         var bkgrd =document.createElementNS("http://www.w3.org/2000/svg", "rect");
             bkgrd.setAttribute("x", 100);
-            bkgrd.setAttribute("width", chartwidth-50);
+            bkgrd.setAttribute("width", chartwidth-100);
             bkgrd.setAttribute("y", 50);
             bkgrd.setAttribute("height", chartheight);
-            bkgrd.setAttribute("fill", "#efefff");
+            bkgrd.setAttribute("fill", tcc_background_color);
             svg.appendChild(bkgrd);
     }    
     //---------------  VERTICAL LINES -------------------------------------//
@@ -423,7 +453,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                 l1.setAttribute("x2", 100+((tickcount*widthmultiplier)*x)); 
                 l1.setAttribute("y1", 50);
                 l1.setAttribute("y2", 50+chartheight);
-                l1.setAttribute("stroke", "#111");  // style="stroke:red;stroke-width:2"
+                l1.setAttribute("stroke", tcc_line_color);  // style="stroke:red;stroke-width:2"
                 l1.setAttribute("stroke-width", ".2");
                 svg.appendChild(l1);  
 
@@ -618,7 +648,352 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
             }    
         }
     }
+    
+    //----------------------------------------  ADDING THE LEGEND -------------------------------------//
+    if (bShowLegend)
+    {
+        for (x=0;x < items.length;x++)
+        {
+            var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                lr1.setAttribute("x", chartwidth+5);
+                lr1.setAttribute("width", 10);
+                lr1.setAttribute("y", 50+(x*15));
+                lr1.setAttribute("height", 10);
+                lr1.setAttribute("fill", colorset[x]);
+                svg.appendChild(lr1);
+            var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                lt1.setAttribute("x", chartwidth+20);
+                lt1.setAttribute("y", 50+(x*15)+10);
+                lt1.setAttribute("fill", "#333");
+                lt1.setAttribute("class","legendtext");
+               
+                lt1.textContent=items[x];
+                svg.appendChild(lt1);                
+         }
+        if (mylinedata != null)
+        {
+            if (mylinedata.length > 0)
+            {
+                for (x=0;x < lineitems.length;x++)
+                {
+                    var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        lr1.setAttribute("x", chartwidth+5);
+                        lr1.setAttribute("width", 10);
+                        lr1.setAttribute("y", 50+(items.length*15)+(x*15));
+                        lr1.setAttribute("height", 10);
+                        lr1.setAttribute("fill", linecolors[x]);
+                        svg.appendChild(lr1);
+                    var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        lt1.setAttribute("x", chartwidth+20);
+                        lt1.setAttribute("y", 50+(items.length*15)+(x*15)+10);
+                        lt1.setAttribute("fill", "#333");
+                        lt1.setAttribute("class","legendtext");
+                       
+                        lt1.textContent=lineitems[x];
+                        svg.appendChild(lt1);                
+                 }
+             }
+         }
+    }
+    document.getElementById(div_id).appendChild(svg);
 
+}  //------------------------------ END FUNCTION BUILD BAR CHART--------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+//----------------------------------------- BUILD A STACKED CHART ------------------------------------------------------------------------------//
+function build_stacked_chart(div_id, svgwidth, svgheight, items, lineitems, myitempts, mydata, mylinedata, colorset, linecolors, bShowLegend, bShowScales, bSingleDimensionArray,
+chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, bIsPercent, barmargin, bShowBackground, valueformat, bColumn_Borders, bShadeBorders, bHideTickMarks)
+{
+
+    var NS="http://www.w3.org/2000/svg";     
+    var svg=document.createElementNS(NS,"svg");
+
+    bHorizontalLines=bShowScales;
+        
+    var chartwidth=svgwidth;
+    var chartheight=svgheight-50;
+
+    var max_value_on_scale = 100;
+    percentage_suffix="%";
+
+    if (bIsPercent==false)
+    {
+//	    max_value_on_scale=0;
+	    percentage_suffix="";
+//	    max_value_on_scale=calculate_mylinedata(max_value_on_scale,mydata);
+    }
+
+    if (bShowLegend) { chartwidth=chartwidth-200; }
+
+    svg.setAttribute("width",svgwidth);
+    svg.setAttribute("height",svgheight);
+
+    barwidth=(chartwidth-80)/(mydata.length*mydata[0].length);
+    
+    heightmultiplier=chartheight/200;
+
+    //--------------- CHART LABELS -------------------------------------//
+        // LABEL ON TOP
+    if (chart_label_position=="top")
+    {
+            var cl1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl1.setAttribute("y", 25);
+                cl1.setAttribute("x", 50);
+                cl1.setAttribute("fill", "#333");
+                cl1.setAttribute("class",chart_label_class);
+                cl1.textContent=chart_label;
+                svg.appendChild(cl1);
+    }
+    // LABEL ON BOTTOM
+    if (chart_label_position=="bottom")
+    {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", chartheight-40);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",chart_label_class);
+                cl2.textContent=chart_label;
+                svg.appendChild(cl2);
+    }
+    // FOOTNOTES
+    if (footnotes!="")
+    {
+        afootnotes=footnotes.split("\n");       
+        vpos=0;
+        for (f=0; f < afootnotes.length; f++)
+        {
+            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                cl2.setAttribute("y", chartheight-20+vpos);
+                cl2.setAttribute("x", 50);
+                cl2.setAttribute("fill", "#333");
+                cl2.setAttribute("class",footnotes_class);
+                cl2.textContent=afootnotes[f];
+                svg.appendChild(cl2);
+            vpos+=9;
+        }
+    }
+    // BACKGROUND
+    if (bShowBackground == true)
+    {
+        var bkgrd =document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            bkgrd.setAttribute("x", 50);
+            bkgrd.setAttribute("width", chartwidth-80);
+            bkgrd.setAttribute("y", 50);
+//            bkgrd.setAttribute("height", chartheight-150);
+            bkgrd.setAttribute("height", max_value_on_scale*heightmultiplier);
+            bkgrd.setAttribute("fill", tcc_background_color);
+            svg.appendChild(bkgrd);
+    }
+    //---------------  HORIZONTAL LINES -------------------------------------//
+    if (bHorizontalLines)
+    {
+        tickcounter=5;//2;//10;//
+        tickcount=100/tickcounter; // 100 IS THE MAX NUMBER - 100%
+        tickcountvalue = max_value_on_scale / tickcounter;
+    
+        for (x=0; x < tickcounter; x++)  //   for (x=0; x < 10; x++)   -- for every 10 points
+        {
+            var l1=document.createElementNS("http://www.w3.org/2000/svg", "line");
+                l1.setAttribute("x1", 45);
+                l1.setAttribute("x2", chartwidth-30);
+                l1.setAttribute("y1", 50+((tickcount*heightmultiplier)*x));//   l1.setAttribute("y1", 50+((10*heightmultiplier)*x))  -- for every 10 points
+                l1.setAttribute("y2", 50+((tickcount*heightmultiplier)*x)); //  l1.setAttribute("y2", 50+((10*heightmultiplier)*x))
+                l1.setAttribute("stroke", tcc_line_color);  // style="stroke:red;stroke-width:2"
+                l1.setAttribute("stroke-width", ".2");
+                svg.appendChild(l1);  
+
+            var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                lt1.setAttribute("x", 25);
+                lt1.setAttribute("y", 50+((tickcount*heightmultiplier)*x)+5);
+                lt1.setAttribute("fill", "#333");
+                lt1.setAttribute("class","tcc_values");
+               
+                lt1.textContent=tickcountvalue*(tickcounter-x)+percentage_suffix;
+                svg.appendChild(lt1);
+        }
+    }
+    
+    //---------------  ADDING THE COLUMN BARS -------------------------------------//
+       for (x=0; x < mydata[0].length; x++)
+        {
+                nextpos=(x*items.length);
+                accumheight=0;
+                columnbase=0;
+                for (z=0;z < items.length; z++)
+                {
+                    columnbase=columnbase+mydata[z][x];
+                }
+                //alert(columnbase);
+                
+                for (y=0;y < items.length; y++)
+                {
+                   
+                    var r2=  document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        r2.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/2));
+                        r2.setAttribute("width", barwidth-barmargin);
+                        r2.setAttribute("y", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) ) );
+                        r2.setAttribute("height", ((mydata[y][x]/columnbase)*100)*heightmultiplier*(100/max_value_on_scale));
+                        r2.setAttribute("fill", colorset[y]);
+                        svg.appendChild(r2);                 
+                    
+                    if (bColumn_Borders==true)
+                    {
+                        //   BORDERS AROUND THE COLUMNS
+                        var lr1 =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1.setAttribute("x1", 50+(barwidth*nextpos)+(barwidth/2));
+                            lr1.setAttribute("x2", 50+(barwidth*nextpos)+(barwidth/2)+barwidth-barmargin);
+                            lr1.setAttribute("y1", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) ) );
+                            lr1.setAttribute("y2", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) ) );
+                            lr1.setAttribute("stroke", "#000000");
+                            lr1.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1);      
+                        var lr1a =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1a.setAttribute("x1", 50+(barwidth*nextpos)+(barwidth/2));
+                            lr1a.setAttribute("x2", 50+(barwidth*nextpos)+(barwidth/2));
+                            lr1a.setAttribute("y1", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) ) );
+                            lr1a.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1a.setAttribute("stroke", "#000000");
+                            lr1a.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1a);      
+                        var lr1ab =  document.createElementNS("http://www.w3.org/2000/svg", "line");
+                            lr1ab.setAttribute("x1", 50+(barwidth*nextpos)+(barwidth/2)+barwidth-barmargin);
+                            lr1ab.setAttribute("x2", 50+(barwidth*nextpos)+(barwidth/2)+barwidth-barmargin);
+                            lr1ab.setAttribute("y1", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) ) );
+                            lr1ab.setAttribute("y2", 50+(100*heightmultiplier));
+                            lr1ab.setAttribute("stroke", "#000000"); 
+                            lr1ab.setAttribute("stroke-width", ".5");
+                            svg.appendChild(lr1ab);      
+                    }                                  
+
+                    // ADDING THE VALUES TO THE BARS
+                    var t1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/2));
+                        t1.setAttribute("y", 50+(100*heightmultiplier-  (((mydata[y][x]+accumheight)/columnbase)*100*heightmultiplier*(100/max_value_on_scale)) )+10 );
+                        t1.setAttribute("fill", "#333");
+                        t1.setAttribute("style", "font: 'Arial' 6px");
+                        if (barwidth > 40) { t1.setAttribute("class","tcc_values_2");    } 
+                        if (barwidth > 30) { t1.setAttribute("class","tcc_values_1");  } 
+                        if (barwidth <= 30) { t1.setAttribute("class","tcc_values"); }
+                        t1.textContent = valueformat.replace("%d", mydata[y][x]).replace("[[value]]", mydata[y][x]).replace("[value]", mydata[y][x]); //mydata[y][x] + percentage_suffix;
+                        svg.appendChild(t1);
+
+                accumheight=accumheight+  mydata[y][x];   
+                }            
+                   
+                // TICK MARKS
+                if (bHideTickMarks== false)
+                {
+                    var t2 =document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        t2.setAttribute("x1", 50+(barwidth*x*items.length));
+                        t2.setAttribute("x2", 50+(barwidth*x*items.length));
+                        t2.setAttribute("y1", 50+((20*heightmultiplier)*5));
+                        t2.setAttribute("y2", 50+((20*heightmultiplier)*5)+5);  
+                        t2.setAttribute("stroke", "#222");  
+                        svg.appendChild(t2);  
+                }
+                var ipt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    ipt1.setAttribute("x", 50+(barwidth*x*items.length)+10);
+                    ipt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20);
+                    ipt1.setAttribute("fill", "#333");
+                    //ipt1.setAttribute("class","values");
+                    if (barwidth < 30)
+                    {
+                        ipt1.setAttribute("class","tcc_values");
+                    } else
+                    {
+                        ipt1.setAttribute("class","tcc_values_1");
+                    }
+                    
+		        var nextitempt=myitempts[x].split("\n");
+		       // alert(myitempts[x]+" " +myitempts[x].length + "  " +barwidth+" " + items.length);
+	            for (z=0;z<nextitempt.length;z++)
+			    {
+			        if (nextitempt[z].length*5 < (barwidth*items.length))
+			        {
+                    		var iptxt1=document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                    		    if (myitempts[x].length*5 < (barwidth*items.length))
+                    		    {
+                        		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length)+(barwidth*items.length)/2-(myitempts[x].length/2)*7);
+                        		}
+                        		else
+                        		{
+                        		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length) );
+                        		}
+                        		iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z));
+                        		iptxt1.setAttribute("fill", "#333");
+                        		iptxt1.setAttribute("class","values");
+                        		iptxt1.textContent=nextitempt[z];
+                        		ipt1.appendChild(iptxt1);
+                     } else
+                     {
+                        var nextitempt2=nextitempt[z].split(" ");
+                        var nextitemptstg="";
+                        var nextitemptstgpre="";
+                        var ictr=0;
+                        for (z2=0;z2< nextitempt2.length; z2++)
+                        {
+                            if (nextitemptstgpre=="") { nextitemptstgpre = nextitempt2[z2]; } else { nextitemptstgpre=nextitemptstgpre+" "+nextitempt2[z2]; }
+                            
+                            if ((nextitemptstgpre.length*5) > (barwidth*items.length))
+                            {
+                    		    var iptxt1=document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length) );
+                        		    iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z+(10*ictr)));
+                        		    iptxt1.setAttribute("fill", "#333");
+                        		    iptxt1.setAttribute("class","values");
+                        		    iptxt1.textContent=nextitemptstg;
+                        		    ipt1.appendChild(iptxt1);
+                        	    nextitemptstgpre= nextitempt2[z2];
+                        	    ictr=ictr+1;
+                            }
+                            nextitemptstg=nextitemptstgpre;
+                        }
+                		    var iptxt1=document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+                        		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length) );
+                        		    iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z+(10*ictr)));
+                        		    iptxt1.setAttribute("fill", "#333");
+                        		    iptxt1.setAttribute("class","values");
+                        		    iptxt1.textContent=nextitemptstg;
+                        		    ipt1.appendChild(iptxt1);
+                        	    nextitemptstgpre= nextitempt2[z2];
+                     }
+			    }
+                   // ipt1.textContent=myitempts[x];
+                 svg.appendChild(ipt1);       
+           }
+   
+    
+    //---------------  ADDING THE LINES -------------------------------------//
+    if (mylinedata != null)
+    {
+        if (mylinedata.length > 0)
+        {
+            linewidth=mydata.length*barwidth;
+            for (x=0; x < mylinedata[0].length; x++)
+            {
+                if (x < mylinedata[0].length-1)
+                {
+                    for (y=0; y< mylinedata.length; y++)
+                    {
+                        var mld2 =document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        mld2.setAttribute("x1", 50+(linewidth/2)+(linewidth*x));
+                        mld2.setAttribute("x2", 50+(linewidth/2)+(linewidth*(x+1)));
+                        mld2.setAttribute("y1", 50+(100*heightmultiplier- mylinedata[y][x]*heightmultiplier*(100/max_value_on_scale)));
+                        mld2.setAttribute("y2", 50+(100*heightmultiplier- mylinedata[y][x+1]*heightmultiplier*(100/max_value_on_scale)));  
+                        mld2.setAttribute("stroke", linecolors[y]);  
+                        mld2.setAttribute("stroke-width", "2");
+                        svg.appendChild(mld2);  
+                    }
+                }
+            }    
+        }
+    }
     
     //---------------  ADDING THE LEGEND -------------------------------------//
     if (bShowLegend)
@@ -667,10 +1042,9 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
          }
     }
     document.getElementById(div_id).appendChild(svg);
-
-}  //------------------------------ END FUNCTION BUILD BAR CHART---------------------------------------------------//
-
-
+}
+  //------------------------------ END FUNCTION BUILD STACKED CHART---------------------------------------------------//
+//----------------------------------------------------------------------------------------------------------------------------------------------//
 
 
 
@@ -760,7 +1134,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
             bkgrd.setAttribute("y", 50);
 //            bkgrd.setAttribute("height", chartheight-150);
             bkgrd.setAttribute("height", max_value_on_scale*heightmultiplier);
-            bkgrd.setAttribute("fill", "#efefff");
+            bkgrd.setAttribute("fill", tcc_background_color);//"#efefff");
             svg.appendChild(bkgrd);
     }
     //---------------  HORIZONTAL LINES -------------------------------------//
@@ -778,7 +1152,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                 l1.setAttribute("x2", chartwidth-30);
                 l1.setAttribute("y1", 50+((tickcount*heightmultiplier)*x));//   l1.setAttribute("y1", 50+((10*heightmultiplier)*x))  -- for every 10 points
                 l1.setAttribute("y2", 50+((tickcount*heightmultiplier)*x)); //  l1.setAttribute("y2", 50+((10*heightmultiplier)*x))
-                l1.setAttribute("stroke", "#000");  // style="stroke:red;stroke-width:2"
+                l1.setAttribute("stroke", tcc_line_color);  // style="stroke:red;stroke-width:2"
                 l1.setAttribute("stroke-width", ".2");
                 svg.appendChild(l1);  
 
@@ -956,8 +1330,6 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                                     shadectr=shadectr-1;
                          }    
                  }
-                
-                       
             }
 
 
@@ -967,7 +1339,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                         t1.setAttribute("x", 50+(barwidth*nextpos)+(barwidth/2)-10);
                         t1.setAttribute("y", 50+(100*heightmultiplier- mydata[y][x]*heightmultiplier*(100/max_value_on_scale))-4);
                         t1.setAttribute("fill", "#333");
-                        t1.setAttribute("style", "font: 'Arial' 6px");
+                        //t1.setAttribute("style", "font: 'Arial' 6px");
                        // t1.setAttribute("class","values");
                         if (barwidth > 40) { t1.setAttribute("class","tcc_values_2");    } 
                         if (barwidth > 30) { t1.setAttribute("class","tcc_values_1");  } 
@@ -984,7 +1356,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                         t2.setAttribute("x2", 50+(barwidth*x*items.length));
                         t2.setAttribute("y1", 50+((20*heightmultiplier)*5));
                         t2.setAttribute("y2", 50+((20*heightmultiplier)*5)+5);  
-                        t2.setAttribute("stroke", "#222");  
+                        t2.setAttribute("stroke", tcc_line_color);  
                         svg.appendChild(t2);  
                 }
                 var ipt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -1017,7 +1389,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                         		}
                         		iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z));
                         		iptxt1.setAttribute("fill", "#333");
-                        		iptxt1.setAttribute("class","values");
+                        		iptxt1.setAttribute("class","tcc_values");
                         		iptxt1.textContent=nextitempt[z];
                         		ipt1.appendChild(iptxt1);
                      } else
@@ -1036,7 +1408,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                         		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length) );
                         		    iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z+(10*ictr)));
                         		    iptxt1.setAttribute("fill", "#333");
-                        		    iptxt1.setAttribute("class","values");
+                        		    iptxt1.setAttribute("class","tcc_values");
                         		    iptxt1.textContent=nextitemptstg;
                         		    ipt1.appendChild(iptxt1);
                         	    nextitemptstgpre= nextitempt2[z2];
@@ -1048,14 +1420,10 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
                         		    iptxt1.setAttribute("x", 50+(barwidth*x*items.length) );
                         		    iptxt1.setAttribute("y", 50+((20*heightmultiplier)*5)+20+(10*z+(10*ictr)));
                         		    iptxt1.setAttribute("fill", "#333");
-                        		    iptxt1.setAttribute("class","values");
+                        		    iptxt1.setAttribute("class","tcc_values");
                         		    iptxt1.textContent=nextitemptstg;
                         		    ipt1.appendChild(iptxt1);
                         	    nextitemptstgpre= nextitempt2[z2];
-                     
-                     
-                     
-                     
                      }
 			    }
                    // ipt1.textContent=myitempts[x];
@@ -1137,6 +1505,9 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
     }
     document.getElementById(div_id).appendChild(svg);
 }
+ //------------------------------ END FUNCTION BUILD COLUMN CHART---------------------------------------------------//
+//----------------------------------------------------------------------------------------------------------------------------------------------//
+
 
 
 
@@ -1233,7 +1604,7 @@ chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, 
         bkgrd.setAttribute("width", chartwidth);
         bkgrd.setAttribute("y", 50);
         bkgrd.setAttribute("height", chartheight);
-        bkgrd.setAttribute("fill", "#efefff");
+        bkgrd.setAttribute("fill", tcc_background_color);
         svg.appendChild(bkgrd);
     }
     
@@ -1295,7 +1666,7 @@ chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, 
             lt1.setAttribute("x", next_text_x_point);
             lt1.setAttribute("y", next_text_y_point);
             lt1.setAttribute("fill", "#fff");
-            lt1.setAttribute("class", "values");
+            lt1.setAttribute("class", "circlevalues");
             lt1.textContent = valueformat.replace("%d", mydatavalues[x]).replace("[[value]]", mydatavalues[x]).replace("[value]", mydatavalues[x]); // mydatavalues[x] + percentage_suffix;
             svg.appendChild(lt1);
 
@@ -1369,6 +1740,10 @@ chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, 
     document.getElementById(div_id).appendChild(svg);
 
 }  //------------------------------ END FUNCTION BUILD PIE CHART---------------------------------------------------//
+
+
+
+
 
 
 
@@ -1452,6 +1827,15 @@ function shade(ncolor,dir)
 return ncolor;
 }	
 
+function check_color(ncolor)
+{
+if (ncolor=="red") { ncolor="#ff0000";}
+if (ncolor=="green") { ncolor="#00ff00";}
+if (ncolor=="blue") { ncolor="#0000ff";}
+if (ncolor=="yellow") { ncolor="#ffff00";}
+if (ncolor=="grey") { ncolor="#cococo";}
 
+return ncolor;
+}
 
 
