@@ -5,7 +5,7 @@ var vertical_text = false;
 
 function build_a_timber_creek_chart(my_new_chart)
 {
-tcc_background_color="#efefff"
+tcc_background_color="transparent"//"#efefff"
 tcc_line_color="#000"
 
 if (my_new_chart.backgroundcolor != null) { tcc_background_color=my_new_chart.backgroundcolor; }
@@ -26,11 +26,13 @@ var chart_type=my_new_chart.charttype;
 var myitems=new Array(my_new_chart.items.length);
 var myitemcolors = new Array(my_new_chart.items.length);
 
+// Assigning the items
 for (x=0; x < my_new_chart.items.length;x++)
 {
 	if(my_new_chart.items[x].name != null) {  myitems[x]=my_new_chart.items[x].name; }
+	 else {  if(my_new_chart.items[x] != null) { myitems[x]=my_new_chart.items[x];  } }
 }
-
+// Assigning the colours
 for (x=0; x < my_new_chart.items.length;x++)
 {
     mycolor=check_color(my_new_chart.items[x].color);
@@ -62,6 +64,7 @@ if (my_new_chart.lineitems != null)
 {
     mylineitems = new Array(my_new_chart.lineitems);
     mylinecolors = new Array(my_new_chart.lineitems);
+    
     for (x=0; x < my_new_chart.lineitems.length;x++)
     {
 	    if(my_new_chart.lineitems[x].name != null) {   mylineitems[x]=my_new_chart.lineitems[x].name; }
@@ -130,7 +133,6 @@ if (my_new_chart.additionalsettings != null) {
     if (my_new_chart.additionalsettings.max_value_on_scale != null) { static_max_value_on_scale = my_new_chart.additionalsettings.max_value_on_scale; }
     if (my_new_chart.additionalsettings.number_of_ticks != null) { static_number_of_ticks = my_new_chart.additionalsettings.number_of_ticks; }
 
-
     if (my_new_chart.additionalsettings.verticaltext != null)  { if (my_new_chart.additionalsettings.verticaltext==true) { vertical_text=true; }  if (my_new_chart.additionalsettings.verticaltext==false) { vertical_text=false; }}  
     if (my_new_chart.additionalsettings.valueformat != null) 
 	{ valueformat= my_new_chart.additionalsettings.valueformat; }
@@ -139,10 +141,12 @@ if (my_new_chart.additionalsettings != null) {
 }
 
 
-
 if (chart_type.toLowerCase()=="line")
     {
-	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,footnotes,footnotes_class,bIsPercent,bShowBackground,valueformat)
+	    build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mydata,myitemcolors,
+	    bShowLegend,bShowScales,chart_label,chart_label_class,chart_label_position,
+	    footnotes,footnotes_class,bIsPercent,bShowBackground,valueformat,
+	    static_max_value_on_scale,static_number_of_ticks)
     }
 if (chart_type.toLowerCase()=="bar")
     {
@@ -170,18 +174,19 @@ if (chart_type.toLowerCase() == "pie") {
 //----------------------------------------- BUILD A LINE CHART -----------------------------------------------------//
 function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata,mylinecolors,bShowLegend,bShowScales,
     chart_label,chart_label_class,chart_label_position,footnotes,footnotes_class,bIsPercent,bShowBackground,
-    valueformat)
+    valueformat,static_max_value_on_scale,static_number_of_ticks)
 {
     var NS="http://www.w3.org/2000/svg";
     var svg=document.createElementNS(NS,"svg");
     svg.setAttribute("width",svgwidth);
     svg.setAttribute("height",svgheight);
+    svg.setAttribute("fill","transparent");
 
     bHorizontalLines=bShowScales;
 
     var chartwidth=svgwidth-25;
 //    var chartheight=svgheight-100;
-    var chartheight=svgheight-(svgheight/5);
+    var chartheight=svgheight-50;//(svgheight/5);
 
     if (bShowLegend) { chartwidth=chartwidth-150; }
 
@@ -190,9 +195,13 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
 
     if (bIsPercent==false)
     {
+        max_value_on_scale=0;
 	    percentage_suffix="";
 	    max_value_on_scale=calculate_mylinedata(max_value_on_scale,mylinedata);
     }    
+    if (static_max_value_on_scale > 0)  { max_value_on_scale=static_max_value_on_scale;  } 
+    
+
 //    heightmultiplier=1.5;
     heightmultiplier=chartheight/200;
     linewidth=(chartwidth)/mylinedata[0].length;
@@ -253,7 +262,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
             bkgrd.setAttribute("y", 50);
             bkgrd.setAttribute("width", chartwidth-linewidth);
 //            bkgrd.setAttribute("height", chartheight-150);
-            bkgrd.setAttribute("height", max_value_on_scale*heightmultiplier);
+            bkgrd.setAttribute("height", 100*heightmultiplier);
             bkgrd.setAttribute("fill", tcc_background_color);
             svg.appendChild(bkgrd);
     }
@@ -373,14 +382,14 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
         for (x=0;x < myitems.length;x++)
         {
             var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                lr1.setAttribute("x", 50+chartwidth-linewidth+10);
+                lr1.setAttribute("x", 100+chartwidth-linewidth+10);
                 lr1.setAttribute("width", 10);
                 lr1.setAttribute("y", 50+(x*15));
                 lr1.setAttribute("height", 10);
                 lr1.setAttribute("fill", mylinecolors[x]);
                 svg.appendChild(lr1);
             var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                lt1.setAttribute("x", 50+chartwidth-linewidth+25);
+                lt1.setAttribute("x", 100+chartwidth-linewidth+25);
                 lt1.setAttribute("y", 50+(x*15)+10);
                 lt1.setAttribute("fill", "#333");
                 lt1.setAttribute("class","legendtext");
@@ -424,6 +433,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
 
     svg.setAttribute("width",svgwidth);
     svg.setAttribute("height",svgheight);
+    svg.setAttribute("fill","transparent");
 
     barwidth=(chartwidth-80)/(mydata.length*mydata[0].length);
     barheight=chartheight/(mydata.length*mydata[0].length);
@@ -785,6 +795,7 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
 
     svg.setAttribute("width",svgwidth);
     svg.setAttribute("height",svgheight);
+    svg.setAttribute("fill","transparent");
 
     barwidth=(chartwidth-80)/(mydata.length*mydata[0].length);
     
@@ -1150,6 +1161,8 @@ static_max_value_on_scale,static_number_of_ticks)
 
     svg.setAttribute("width",svgwidth);
     svg.setAttribute("height",svgheight);
+    svg.setAttribute("fill","transparent");
+
 
     barwidth=(chartwidth-80)/(mydata.length*mydata[0].length);
     
@@ -1652,7 +1665,8 @@ chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, 
     var svg = document.createElementNS(NS, "svg");
     svg.setAttribute("width", svgwidth);
     svg.setAttribute("height", svgheight);
-   // alert(mydatainput);
+    svg.setAttribute("fill","transparent");
+
    
 
     mydatavalues = Array(mydatainput[0].length);
