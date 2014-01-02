@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+       
+    <script type="text/javascript" src="timbercreekcharts.js"></script>
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+    </style>
+    
+    
+<style>
+    div
+	{
+    border-top: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    border-radius: 5px;
+    margin: 3px;
+    color: Navy;		
+	}
+
+    invisible
+	{
+    border-top: 0px none transparent;
+    border-left: 0px none transparent;
+    border-bottom: 0px none transparent;
+    border-right: 0px none transparent;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    margin: 3px;
+    color: Navy;		
+	}
+
+	select
+    {
+    border-top: .5px solid #000000;
+    border-left: .5px none #000000;
+    border-bottom: .5px none #000000;
+    border-right: .5px none #000000;
+    background-color: Transparent;
+    font-family: Arial;
+    font-size: 8pt;     
+    font-weight: normal; 
+    color: navy;
+    width:auto;   
+    }
+    
+    p.pclass
+    {
+    font-family: Tahoma;
+    font-size: 9pt;     
+    font-weight: normal;     
+    color: black;    
+    }
+</style>
+
+    <title>Untitled Page</title>
+</head>
+<body>
+<div class='invisible' style="border: none 0px;">
+<div>
+<p >Timber Creek Charts</p>
+<p class="pclass">
+A free open-source easy-to-use javascript charting library.
+<p>
+</div>
+<p class="pclass">
+To use Timber Creek Charts, include a link to timbercreekcharts.js and the style sheet, timbercreekcharts.css.
+</p>
+<textarea rows="5" cols="100" readonly="readonly" style="height:200; width: 700;">
+<head>
+  <script type="text/javascript" src="timbercreekcharts.js"></script>
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+    </style>
+</head>
+</textarea>
+<p class="pclass">
+That is all that is needed to start creating charts.  Place a div on the page and the following javascript code.
+</p>
+
+<textarea rows="14" cols="100" readonly="readonly" style="height:200; width: 700;">
+<div id="divtest1"></div>
+<script type="text/javascript">
+      var my_new_chart = {
+          "div_id": "divtest1",
+          "dimensions": { "height": 250, "width":400 },
+          "charttype": "column",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1]],
+	  "items" : [''],  
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+</script>
+</textarea>
+<p class="pclass">
+This is the chart that will be created by the above code:
+</p>
+        <div id="divtest1" style="border: none 0px; height:400; width: 600;" >
+        </div>
+<p class="pclass">
+The script can also be notated as follows:
+</p>
+
+<textarea rows="10" cols="100" readonly="readonly" style="height:200; width: 700;">
+      var new_chart ={};
+      new_chart.div_id   ="divtest2";
+      new_chart.chart_label="Satisfaction by quarter";
+      new_chart.items=[''];
+      new_chart.itempoints=['Q3,2012','Q4,2012','Q1,2013','Q2,2013','Q3,2013'];   
+      new_chart.data=[87,91,89,92,94];
+      new_chart.dimensions={ "height": 250, "width": 400 };
+
+      build_a_timber_creek_chart(new_chart);
+</textarea>
+        <div id="divtest2" style="border: none 0px; height:400; width: 600;" >
+        </div>
+<p class="pclass">
+The following is the syntax for a 2-item chart.
+</p>
+<textarea rows="12" cols="100" readonly="readonly" style="height:200; width: 700;">
+      var my_new_chart = {
+          "div_id": "divtest3",
+          "dimensions": { "height": 250, "width":600 },
+          "charttype": "column",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1],[68,26,5,1,1]],
+	  "items" : ['item1','item2'],  
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+</textarea>
+
+        <div id="divtest3" style="border: none 0px; height:400; width: 600;" >
+        </div>
+<p class="pclass">
+This is the same data displayed in a bar chart:
+</p>
+<textarea id="ta10" rows="12" cols="100" readonly="readonly" style="height:200; width: 700;">
+      var my_new_chart = {
+          "div_id": "divtest3",
+          "dimensions": { "height": 250, "width":600 },
+          "charttype": "bar",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1],[68,26,5,1,1]],
+	  "items" : ['item1','item2'],  
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+</textarea>
+
+        <div id="divtest4" style="border: none 0px; height:400; width: 600;" >
+        </div>
+<p class="pclass">
+Next is an example of the different chart types possible: bar, column, line, stacked and pie. A background color has also been added.
+</p>
+
+<textarea id="ta11" rows="21" cols="100" readonly="readonly" style="height:200; width: 700;">
+      var my_new_chart = {
+          "div_id": "divtest5",
+          "dimensions": { "height": 300, "width":500 },
+          "charttype": "bar",
+	  "backgroundcolor" : "#aaa",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1],[68,26,5,1,1]],
+	  "items" : ['item1','item2'],  
+	   "additionalsettings" : { "showbackground" : true }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="column";
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="line";
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="stacked";
+      my_new_chart.ispercentage=false;          // not using percentage for the stacked chart
+      my_new_chart.data=[[210,134,26,5,3],[304,123,91,5,2]];    // changing the data to actual values
+      build_a_timber_creek_chart(my_new_chart);
+</textarea>
+        <div id="divtest5" style="border: none 0px; height:400; width: 600;" >
+        </div>
+</div>
+
+<p class="pclass">
+The pie chart has to be set up a little bit differently. 
+</p>
+
+<textarea id="ta12" rows="17" cols="100" readonly="readonly" style="height:200; width: 700;">
+	var my_new_chart = {
+          "div_id": "divtest6",
+          "dimensions": { "height": 400, "width":400 },
+          "charttype": "pie",
+	  "backgroundcolor" : "#bcbcbc",
+          "chart_label": "Which fruit do you prefer?",
+          "data": [55,30,15],
+	  "items" : [	{"name" : "bananas", "color": "yellow"},
+			{"name" : "apples", "color": "red"},
+			{"name" : "oranges", "color": "orange"}
+	            ],  
+	   "additionalsettings" : { "showbackground" : true, "valueformat" : "%d%" }      
+			// the value format describes how the data is formatted on the chart
+			// %d represents the value being passed in
+      };
+      build_a_timber_creek_chart(my_new_chart);
+</textarea>
+        <div id="divtest6" style="border: none 0px; height:500; width: 500;" >
+        </div>
+
+
+<p class="pclass">
+The following example shows some of the different parameters and settings that can be used, among them adding footnotes, setting the color scheme and shading the bars of the chart.
+ It also is an example that is not percentages 
+</p>
+
+<textarea id="ta13" rows="25" cols="100" readonly="readonly" style="height:200; width: 700;">
+       var my_new_chart = {
+          "div_id": "divtest7",
+          "dimensions": { "height": 350, "width":750 },
+          "charttype": "column", 
+          "items": ["concept 1","concept 2","concept 3"],
+          "itempoints": ["Q1","Q2","Q3","Q4","Q5"],  
+          "data": [[3.8,3.4,3.7,3.6,4.0],[3.9,3.8,3.9,4.0,3.75],[2.7,3.1,2.8,3.1,3.0]], 
+          "ispercentage": false,
+	  "color_scheme" : "red",
+          "chart_label": { "name" : "Average Scores of 5 key variables",
+			   "class" : "pclass", "position" : "top" },
+          "chart_footnote": "4 - very satisfied\n3 - somewhat satisfied\n2- neither satisfied or dissatisfied\n1 -somewhat dissatisfied\n0 -very dissatisfied",
+          "display_footnote": true,
+          "additionalsettings": { 
+					"barmargin": "1",
+					"showscales" : true,
+					"showlegend" : true,
+					"shadeborders" : true
+				}
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);     
+</textarea>
+        <div id="divtest7" style="border: none 0px; height:500; width: 500;" >
+        </div>
+
+</div>
+
+  <script type="text/javascript">
+
+
+      var my_new_chart = {
+          "div_id": "divtest1",
+          "dimensions": { "height": 250, "width":400 },
+          "charttype": "column",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1]],
+	  "items" : [''],  
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+      var new_chart ={};
+      new_chart.div_id   ="divtest2";
+      new_chart.chart_label="Satisfaction by quarter";
+      new_chart.items=[''];
+      new_chart.itempoints=['Q3,2012','Q4,2012','Q1,2013','Q2,2013','Q3,2013'];   
+      new_chart.data=[87,91,89,92,94];
+      new_chart.dimensions={ "height": 250, "width": 400 };
+
+      build_a_timber_creek_chart(new_chart);
+
+
+      var my_new_chart = {
+          "div_id": "divtest3",
+          "dimensions": { "height": 250, "width":600 },
+          "charttype": "column",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1],[68,26,5,1,1]],
+	  "items" : ['item1','item2'],  
+      };
+
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
+          "div_id": "divtest4",
+          "dimensions": { "height": 250, "width":600 },
+          "charttype": "bar",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[65,25,7,2,1],[68,26,5,1,1]],
+	      "items" : ['item1','item2'],  
+      };
+    
+      build_a_timber_creek_chart(my_new_chart);
+
+      var my_new_chart = {
+          "div_id": "divtest5",
+          "dimensions": { "height": 300, "width":500 },
+          "charttype": "bar",
+	      "backgroundcolor" : "#bfbfaf",
+          "chart_label": "How satisfied are you with the product",
+           "itempoints": ["very satisfied", "somewhat satisfied", "neither satisfied nor dissatisfied","somewhat dissatisfied","very dissatisfied"],   
+          "data": [[55,30,10,5,1],[68,26,5,1,1]],
+	     "items" : ['item1','item2'],  
+	   "additionalsettings" : { "showbackground" : true }
+      };
+      
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="column";
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="line";
+      build_a_timber_creek_chart(my_new_chart);
+      my_new_chart.charttype="stacked";
+      my_new_chart.ispercentage=false;
+      my_new_chart.data=[[210,134,26,5,3],[304,123,91,5,2]];
+      build_a_timber_creek_chart(my_new_chart);
+
+	var my_new_chart = {
+          "div_id": "divtest6",
+          "dimensions": { "height": 300, "width":400 },
+          "charttype": "pie",
+	  "backgroundcolor" : "#bcbcbc",
+          "chart_label": "Which fruit do you prefer?",
+          "data": [55,30,15],
+	  "items" : [{"name" : "bananas", "color": "yellow"},{"name" : "apples", "color": "#ff0000"},{"name" : "oranges", "color": "orange"}],  
+	   "additionalsettings" : { "showbackground" : true, "valueformat" : "%d%" }
+      };
+      build_a_timber_creek_chart(my_new_chart);
+
+
+
+      
+       var my_new_chart = {
+          "div_id": "divtest7",
+          "dimensions": { "height": 350, "width":750 },
+          "charttype": "column", 
+          "items": ["concept 1","concept 2","concept 3"],
+          "itempoints": ["Q1","Q2","Q3","Q4","Q5"],  
+          "data": [[3.8,3.4,3.7,3.6,4.0],[3.9,3.8,3.9,4.0,3.75],[2.7,3.1,2.8,3.1,3.0]], 
+          "ispercentage": false,
+	  "color_scheme" : "red",
+          "chart_label": { "name" : "Average Scores of 5 key variables", "class" : "pclass", "position" : "top" },
+          "chart_footnote": "4 - very satisfied\n3 - somewhat satisfied\n2- neither satisfied or dissatisfied\n1 -somewhat dissatisfied\n0 -very dissatisfied",
+          "display_footnote": true,
+          "additionalsettings": { "barmargin": "1","showscales" : true,"showlegend" : true, "shadeborders" : true }
+      };
+     
+      build_a_timber_creek_chart(my_new_chart);     
+      </script>
+
+</body>
+</html>
