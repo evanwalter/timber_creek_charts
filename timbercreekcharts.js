@@ -281,7 +281,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
         vpos=0;
         for (f=0; f < afootnotes.length; f++)
         {
-            svg.appendChild(write_line_of_text(afootnotes[f],50,chartheight-20+vpos,"#333",footnotes_class));
+            svg.appendChild(write_line_of_text(afootnotes[f],50,chartheight+30+vpos,"#333",footnotes_class));
             vpos+=9;
         }
     }
@@ -477,7 +477,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
         {
             var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 //lr1.setAttribute("x", 100+chartwidth-linewidth+10);   // CHANGED 2013-11-30
-                lr1.setAttribute("x", 50+chartwidth-linewidth+10);
+                lr1.setAttribute("x", 50+chartwidth-(linewidth/2)+10);
                 lr1.setAttribute("width", 10);
                 lr1.setAttribute("y", 50+(x*15));
                 lr1.setAttribute("height", 10);
@@ -487,7 +487,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 svg.appendChild(lr1);
             var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
                 //lt1.setAttribute("x", 100+chartwidth-linewidth+25);
-                lt1.setAttribute("x", 50+chartwidth-linewidth+25);
+                lt1.setAttribute("x", 50+chartwidth-(linewidth/2)+25);
                 lt1.setAttribute("y", 50+(x*15)+10);
                 lt1.setAttribute("fill", "#333");
                 lt1.setAttribute("class","legendtext");
@@ -498,7 +498,7 @@ function build_line_chart(div_id,svgwidth,svgheight,myitems,myitempts,mylinedata
                 svg.appendChild(lt1);  
 
             var hlr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                hlr1.setAttribute("x", 50+chartwidth-linewidth+10);
+                hlr1.setAttribute("x", 50+chartwidth-(linewidth/2)+10);
                 hlr1.setAttribute("width", 200);
                 hlr1.setAttribute("y", 50+(x*15));
                 hlr1.setAttribute("height", 10);
@@ -589,13 +589,15 @@ chart_label,chart_label_class, chart_label_position,footnotes,footnotes_class, b
         vpos=0;
         for (f=0; f < afootnotes.length; f++)
         {
-            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                cl2.setAttribute("y", 50+chartheight+20+vpos);
-                cl2.setAttribute("x", 50);
-                cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class",footnotes_class);
-                cl2.textContent=afootnotes[f];
-                svg.appendChild(cl2);
+//            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+//                cl2.setAttribute("y", 50+chartheight+20+vpos);
+//                cl2.setAttribute("x", 50);
+//                cl2.setAttribute("fill", "#333");
+//                cl2.setAttribute("class",footnotes_class);
+//                cl2.textContent=afootnotes[f];
+//                svg.appendChild(cl2);
+//                
+            svg.appendChild(write_line_of_text(afootnotes[f],50,50+chartheight+30+vpos,"#333",footnotes_class));           
             vpos+=9;
         }
     }
@@ -1439,13 +1441,14 @@ static_max_value_on_scale,static_number_of_ticks)
         vpos=0;
         for (f=0; f < afootnotes.length; f++)
         {
-            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                cl2.setAttribute("y", chartheight-20+vpos);
-                cl2.setAttribute("x", 50);
-                cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class",footnotes_class);
-                cl2.textContent=afootnotes[f];
-                svg.appendChild(cl2);
+//            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+//                cl2.setAttribute("y", chartheight+30+vpos);
+//                cl2.setAttribute("x", 50);
+//                cl2.setAttribute("fill", "#333");
+//                cl2.setAttribute("class",footnotes_class);
+//                cl2.textContent=afootnotes[f];
+//                svg.appendChild(cl2);
+            svg.appendChild(write_line_of_text(afootnotes[f],50,chartheight+30+vpos,"#333",footnotes_class));
             vpos+=9;
         }
     }
@@ -1921,49 +1924,6 @@ static_max_value_on_scale,static_number_of_ticks)
 }
  //------------------------------ END FUNCTION BUILD COLUMN CHART---------------------------------------------------//
 //----------------------------------------------------------------------------------------------------------------------------------------------//
-/**********
-            var lr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                lr1.setAttribute("x", (widthmultiplier*100+100)+5);
-                lr1.setAttribute("width", 10);
-                lr1.setAttribute("y", 50+(x*15));
-                lr1.setAttribute("height", 10);
-                lr1.setAttribute("fill", colorset[x]);
-                lr1.setAttribute("id",div_id+"-"+tcc_div_chart_counter+"barchart-legendbox"+x);
-                svg.appendChild(lr1);
-            var lt1 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                lt1.setAttribute("x", (widthmultiplier*100+100)+20);
-                lt1.setAttribute("y", 50+(x*15)+10);
-                lt1.setAttribute("fill", "#333");
-                lt1.setAttribute("class","legendtext");
-                lt1.setAttribute("name",div_id+"-"+tcc_div_chart_counter+"barchartzz"+x);
-                lt1.setAttribute("id",div_id+"-"+tcc_div_chart_counter+"barchart-legendtext"+x);
-                lt1.textContent=items[x];
-                svg.appendChild(lt1);                
-                
-                var hlr1 =document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                hlr1.setAttribute("x", 50+chartwidth-linewidth+10);
-                hlr1.setAttribute("width", 200);
-                hlr1.setAttribute("y", 50+(x*15));
-                hlr1.setAttribute("height", 10);
-                hlr1.setAttribute("id",div_id+"-"+tcc_div_chart_counter+"barchart-legendhidden"+x);
-                hlr1.setAttribute("fill", "transparent");
-                if (bBarBorders == true)
-                {
-                    hlr1.setAttribute("onclick","tcc_item_bar_click('bar','"+div_id+"-"+tcc_div_chart_counter+"svg','"+div_id+"-"+tcc_div_chart_counter+"barchart-legendtext"+x+"','"+div_id+"-"+tcc_div_chart_counter+"bar','"+mydata[0].length+"','"+x+"','"+div_id+"-"+tcc_div_chart_counter+"barborder');");
-                } else
-                {
-                    hlr1.setAttribute("onclick","tcc_item_bar_click('bar','"+div_id+"-"+tcc_div_chart_counter+"svg','"+div_id+"-"+tcc_div_chart_counter+"barchart-legendtext"+x+"','"+div_id+"-"+tcc_div_chart_counter+"bar','"+mydata[0].length+"','"+x+"','');");
-                }                   
-                svg.appendChild(hlr1);   
-
-
-*/
-
-
-
-
-
-
 
 
 
@@ -2047,13 +2007,14 @@ chart_label, chart_label_class, chart_label_position,footnotes,footnotes_class, 
         vpos=0;
         for (f=0; f < afootnotes.length; f++)
         {
-            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
-                cl2.setAttribute("y", chartheight-20+vpos);
-                cl2.setAttribute("x", 50);
-                cl2.setAttribute("fill", "#333");
-                cl2.setAttribute("class",footnotes_class);
-                cl2.textContent=afootnotes[f];
-                svg.appendChild(cl2);
+//            var cl2 =  document.createElementNS("http://www.w3.org/2000/svg", "text");
+//                cl2.setAttribute("y", chartheight-20+vpos);
+//                cl2.setAttribute("x", 50);
+//                cl2.setAttribute("fill", "#333");
+//                cl2.setAttribute("class",footnotes_class);
+//                cl2.textContent=afootnotes[f];
+//                svg.appendChild(cl2);
+            svg.appendChild(write_line_of_text(afootnotes[f],50,chartheight+30+vpos,"#333",footnotes_class));
             vpos+=9;
         }
     }   
