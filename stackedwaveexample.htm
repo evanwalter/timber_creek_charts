@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+       
+    <script type="text/javascript" src="timbercreekcharts-beta.js"></script>
+    <script type="text/javascript" src="timbercreekcharts-grids.js"></script>
+<link rel="stylesheet" type="text/css" href="timbercreekcharts.css"/>      
+    </style>
+    
+    
+<style>
+    div
+	{
+    border-top: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    border-radius: 5px;
+    margin: 3px;
+    color: Navy;		
+	}
+
+    invisible
+	{
+    border-top: 0px none transparent;
+    border-left: 0px none transparent;
+    border-bottom: 0px none transparent;
+    border-right: 0px none transparent;
+    background-color: transparent;
+    border-spacing: 0px;
+    font-family: Arial;
+    font-size: 12pt;     
+    font-weight: normal; 
+    margin: 3px;
+    color: Navy;		
+	}
+
+	select
+    {
+    border-top: .5px solid #000000;
+    border-left: .5px none #000000;
+    border-bottom: .5px none #000000;
+    border-right: .5px none #000000;
+    background-color: Transparent;
+    font-family: Arial;
+    font-size: 8pt;     
+    font-weight: normal; 
+    color: navy;
+    width:auto;   
+    }
+    
+    p.pclass
+    {
+    font-family: Tahoma;
+    font-size: 11pt;     
+    font-weight: bold;     
+    
+    }
+</style>
+
+    <title>Untitled Page</title>
+</head>
+<body>
+<div class='invisible' style="border: none 0px;">
+        <div id="divtest1a" style="float:left;background-color:#fefefe ">
+        </div>
+        <div id="divtest1b" style="float:left;background-color:#fefefe ">
+        </div>
+
+</div>
+
+  <script type="text/javascript">
+	chart_label="Please rate the castaways";
+	
+    
+	data_set=  "[[4.5,2.7,0.4,8.6,9.6,10],[8.6,8.2,2.0,8.5,9.4,10],[0.1,0.2,10,7.9,7.5,10],[0.0,0.2,10,8.6,6.3,10],[3,4,6.7,4.6,7.9,10],[9.8,9.6,1.1,9.1,8.3,10.0],[3.2,3.5,1.9,9.7,8.0,10],[5.4,5.5,3.9,8.9,8.0,10]]";
+  	item_points="['Skillful','Handy','Rich','Happy','Funny','Stranded']"
+	//items="[{'name':'','color':'#4467ef'}]"
+    items="['Gilligan','The Skipper','The Millionaire','Lovie','Ginger','The Professor','Mary ann','The entire member of the SS Minnow castaways']"    
+
+      var my_new_chart = {
+          "div_id": "divtest1a",
+          "dimensions": { "height": 300, "width": 700 },
+          "charttype": "line",
+          "items": eval(items), 
+          "itempoints": eval(item_points),   
+          "data": eval(data_set),  
+          "ispercentage": false,
+          "chart_label": chart_label,
+          "chart_label_position": "top",
+          "chart_footnote": "test footnote",
+          "display_footnote": false,   
+	  
+	  "linecolor" : "#111",    
+          "additionalsettings": { "showbackground" : true,"showscales": false, "verticaltext": true, "shadeborders" : true, "displaylegend" : true, "max_value_on_scale" : 10, "number_of_ticks" : 5 }
+      };
+
+
+      build_a_timber_creek_chart(my_new_chart);
+      
+      my_new_chart.div_id="divtest1b";
+      my_new_chart.charttype="stackedwave";
+      my_new_chart.dimensions={ "height": 600, "width": 700 };
+      
+      build_a_timber_creek_chart(my_new_chart);
+
+      </script>
+
+</body>
+</html>
